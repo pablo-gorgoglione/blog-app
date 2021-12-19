@@ -9,6 +9,7 @@ interface IUserContext {
   login: (user: IUser) => void;
   logout: () => void;
   checkIsLog: () => void;
+  register: (user: IUser) => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -38,6 +39,13 @@ export const UserProvider = ({ children }: props) => {
     }
   };
 
+  const register = async (user: IUser) => {
+    const data = await UserService.register(user);
+    if (data.data.Data.user) {
+      console.log(data.data.Data.user);
+    }
+  };
+
   const logout = () => {
     dispatch({ type: 'SET_ISLOG', payload: false });
     dispatch({ type: 'SET_USERNAME', payload: '' });
@@ -56,7 +64,9 @@ export const UserProvider = ({ children }: props) => {
   };
 
   return (
-    <UserContext.Provider value={{ login, logout, checkIsLog, userState }}>
+    <UserContext.Provider
+      value={{ register, login, logout, checkIsLog, userState }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -38,3 +38,10 @@ export interface IUser {
   username: string;
   password: string;
 }
+
+// Register Form
+export interface IFormValues {
+  username: string;
+  password: string;
+  repeatPass: string;
+}

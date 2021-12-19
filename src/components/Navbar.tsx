@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { StyledNav } from './styles/Nav.styled';
-import { useUser } from '../hooks/userUser';
+import { useUser } from '../hooks/useUser';
 
 interface HeaderProps {}
 export const Navbar: React.FC<HeaderProps> = () => {

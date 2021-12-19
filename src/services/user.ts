@@ -9,5 +9,14 @@ class UserService {
       password,
     });
   }
+
+  register(user: IUser) {
+    const { password, username } = user;
+
+    return http.post('/user/register', {
+      username,
+      password,
+    });
+  }
 }
 export default new UserService();

@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { IUser } from '../interfaces/interfaces';
 import { StyledLogin } from '../components/styles/Login.styled';
-import { useUser } from '../hooks/userUser';
+import { useUser } from '../hooks/useUser';
 
 interface LoginProps {}
 
