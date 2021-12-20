@@ -36,7 +36,7 @@ export const Post: React.FC<PostProps> = () => {
   const params = useParams();
   const idPost = params.idPost;
   const cookies = new Cookies();
-  let logged = cookies.get('userInfo');
+  let jwt = cookies.get('userInfo');
 
   useEffect(() => {
     setLoading(true);
@@ -45,7 +45,7 @@ export const Post: React.FC<PostProps> = () => {
   }, []);
 
   const getPost = async () => {
-    const res = await PostService.getOne(idPost, logged);
+    const res = await PostService.getOne(idPost, jwt);
     if (res.data.Data) {
       setPost(res.data.Data);
       setLoading(false);
@@ -59,7 +59,7 @@ export const Post: React.FC<PostProps> = () => {
   };
 
   const getAllComments = async () => {
-    const res = await PostService.getAllComments(idPost, logged);
+    const res = await PostService.getAllComments(idPost, jwt);
     if (res) {
       setComments(res.data.Data);
     }
@@ -74,7 +74,7 @@ export const Post: React.FC<PostProps> = () => {
   };
 
   const handleLikeEvent = async () => {
-    const res = await LikeService.sendLikePost(idPost, logged);
+    const res = await LikeService.sendLikePost(idPost, jwt);
     if (res) {
       let newlikecounter: number = res.data.Data.likeCounter;
       setPost({ ...post, likeCounter: newlikecounter });
@@ -82,7 +82,7 @@ export const Post: React.FC<PostProps> = () => {
   };
 
   const handleDislikeEvent = async () => {
-    const res = await LikeService.deleteLikePost(idPost, logged);
+    const res = await LikeService.deleteLikePost(idPost, jwt);
     if (res) {
       let newlikecounter: number = res.data.Data.likeCounter;
       setPost({ ...post, likeCounter: newlikecounter });
@@ -98,7 +98,7 @@ export const Post: React.FC<PostProps> = () => {
   };
 
   const handleCommentSubmit = async () => {
-    const res = await CommentService.createOne(post._id, logged, newcomment);
+    const res = await CommentService.createOne(post._id, jwt, newcomment);
     if (res.data.Data) {
       getAllComments();
       setNewComment('');
@@ -144,7 +144,14 @@ export const Post: React.FC<PostProps> = () => {
           <div>
             {comments.length > 0 ? (
               comments.map((c) => {
-                return <Comment comment={c} />;
+                return (
+                  <Comment
+                    comment={c}
+                    idPost={post._id}
+                    jwt={jwt}
+                    getAllComments={getAllComments}
+                  />
+                );
               })
             ) : (
               <p className='CommentP'>No comments</p>
