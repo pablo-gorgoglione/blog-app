@@ -99,8 +99,10 @@ export const Post: React.FC<PostProps> = () => {
 
   const handleCommentSubmit = async () => {
     const res = await CommentService.createOne(post._id, logged, newcomment);
-    console.log(res);
-    getPost();
+    if (res.data.Data) {
+      getAllComments();
+      setNewComment('');
+    }
   };
 
   if (loading) {
