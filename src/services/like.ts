@@ -23,7 +23,7 @@ class LikeServices {
     jwt: string
   ) {
     return http.post(
-      `/post/${idPost}/${idComment}/like`,
+      `/post/${idPost}/comment/${idComment}/like`,
       {},
       {
         headers: { Authorization: jwt },
@@ -36,13 +36,9 @@ class LikeServices {
     idPost: string | undefined,
     jwt: string
   ) {
-    return http.post(
-      `/post/${idPost}/${idComment}/like`,
-      {},
-      {
-        headers: { Authorization: jwt },
-      }
-    );
+    return http.delete(`/post/${idPost}/comment/${idComment}/like`, {
+      headers: { Authorization: jwt },
+    });
   }
 }
 

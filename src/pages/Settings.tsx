@@ -11,7 +11,11 @@ export const Settings: React.FC<SettingsProps> = () => {
     <div>
       <ChangeUsername />
       <ChangePassword />
+
+      <br />
       {usernameSuccess && <h2>The username has been changed successfully</h2>}
+
+      <br />
       {passwordSuccess && <h2>The password has been changed successfully</h2>}
     </div>
   );

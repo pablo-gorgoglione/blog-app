@@ -77,6 +77,7 @@ export const useSettings = () => {
       changePassword(passwordValues.password);
       setPasswordValues({ passRepeat: '', password: '' });
       setPasswordSuccess(true);
+      console.log(passwordSuccess);
     }
   }, [passwordError, firstPassword]);
 

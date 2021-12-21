@@ -2,6 +2,8 @@ import { IComment } from '../interfaces/interfaces';
 import { StyledComment } from './styles/Comment.styled';
 import CommentService from '../services/comment';
 import { DateFormat } from '../utils/DateFormatting';
+import { useState } from 'react';
+import LikeService from '../services/like';
 
 interface CommentProps {
   comment: IComment;
@@ -16,10 +18,27 @@ export const Comment: React.FC<CommentProps> = ({
   jwt,
   getAllComments,
 }) => {
+  const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
+
   const handleDelete = async () => {
     const res = await CommentService.deleteOne(idPost, jwt, comment._id);
     if (res.data.Success === 1) {
       getAllComments();
+    }
+  };
+
+  const handleLike = async () => {
+    const data = await LikeService.sendLikeComment(comment._id, idPost, jwt);
+    if (data.data.Data) {
+      console.log(data.data.Data.likeCounter);
+      setLikeCounter(data.data.Data.likeCounter);
+    }
+  };
+  const handleDislike = async () => {
+    const data = await LikeService.deleteLikeComment(comment._id, idPost, jwt);
+    if (data.data.Data) {
+      console.log(data.data.Data.likeCounter);
+      setLikeCounter(data.data.Data.likeCounter);
     }
   };
 
@@ -32,9 +51,6 @@ export const Comment: React.FC<CommentProps> = ({
       <div className='usernamediv'>
         <p style={{ display: 'inline-block' }}> {comment.content}</p>
         <div className='btndiv'>
-          <button style={{ display: 'inline-block', marginLeft: '15px' }}>
-            Like
-          </button>
           <button
             style={{
               display: 'inline-block',
@@ -47,7 +63,17 @@ export const Comment: React.FC<CommentProps> = ({
         </div>
       </div>
 
-      {comment.likeCounter > 0 && <p>likes: {comment.likeCounter}</p>}
+      <div className='Like'>
+        <span>Likes: {likeCounter}</span>
+        <div>
+          <button className='LikeButton' onClick={handleLike}>
+            +1
+          </button>
+          <button className='DislikeButton' onClick={handleDislike}>
+            -1
+          </button>
+        </div>
+      </div>
       <hr />
     </StyledComment>
   );
