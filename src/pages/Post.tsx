@@ -27,7 +27,6 @@ const commmentsInitialValues = {} as IComment[];
 export const Post: React.FC<PostProps> = () => {
   let navigate = useNavigate();
   const [post, setPost] = useState<IPost>(postInitialValues);
-  const [date, setDate] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
   const [show, setShow] = useState<boolean>(false);
@@ -41,21 +40,30 @@ export const Post: React.FC<PostProps> = () => {
   useEffect(() => {
     setLoading(true);
     getPost();
-    getAllComments();
   }, []);
+
+  useEffect(() => {
+    changeDateFormat();
+    getAllComments();
+  }, [post.content]);
+
+  useEffect(() => {
+    if (!show) {
+      setAddComment(false);
+    }
+  }, [show]);
 
   const getPost = async () => {
     const res = await PostService.getOne(idPost, jwt);
-    if (res.data.Data) {
+    if (res.data.Success === 1) {
       setPost(res.data.Data);
       setLoading(false);
-      changeDateFormat();
     }
   };
 
   const changeDateFormat = () => {
     let date: string = DateFormat(post.datePublished);
-    setDate(date);
+    setPost({ ...post, datePublished: date });
   };
 
   const getAllComments = async () => {
@@ -102,6 +110,7 @@ export const Post: React.FC<PostProps> = () => {
     if (res.data.Data) {
       getAllComments();
       setNewComment('');
+      setShow(true);
     }
   };
 
@@ -116,7 +125,7 @@ export const Post: React.FC<PostProps> = () => {
       </button>
       <div className='Content'>
         <h1>{post.title}</h1>
-        <p>{date}</p>
+        <p>{post.datePublished}</p>
         <p>{post.content}</p>
       </div>
       <div className='Like'>
@@ -146,6 +155,7 @@ export const Post: React.FC<PostProps> = () => {
               comments.map((c) => {
                 return (
                   <Comment
+                    key={c._id}
                     comment={c}
                     idPost={post._id}
                     jwt={jwt}

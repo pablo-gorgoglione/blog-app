@@ -5,7 +5,8 @@ export const StyledPostCard = styled.div`
   background-color: rgb(42, 42, 42);
   padding-left: 20px;
   padding-right: 20px;
-  border: 2px solid rgb(114, 101, 67);
+  /* border: 2px solid rgb(114, 101, 67); */
+  border: 2px solid rgb(70, 70, 70);
   transition: 0.3s;
   &:hover {
     cursor: pointer;

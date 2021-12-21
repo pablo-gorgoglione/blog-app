@@ -20,6 +20,7 @@ export const StyledNav = styled.nav`
     color: white;
     &:hover {
       background-color: #383838;
+      cursor: pointer;
     }
   }
   .loginSpan {

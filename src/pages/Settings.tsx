@@ -1,45 +1,18 @@
-import React, { useState } from 'react';
+import { ChangePassword } from '../components/Settings/ChangePassword';
+import { ChangeUsername } from '../components/Settings/ChangeUsername';
+import { useSettings } from '../hooks/useSettings';
 
 interface SettingsProps {}
 
 export const Settings: React.FC<SettingsProps> = () => {
-  const [showPass, setShowPass] = useState<boolean>(false);
-  const [showName, setShowName] = useState<boolean>(false);
-
-  const toggleShowPass = () => {
-    setShowPass(!showPass);
-  };
-  const toggleShowName = () => {
-    setShowName(!showName);
-  };
-
-  //TODO - handle changes, validate the passwords equality, and fetch the data
+  const { passwordSuccess, usernameSuccess } = useSettings();
 
   return (
     <div>
-      <h2>Change password</h2>
-      <button onClick={toggleShowPass}>Go</button>
-      <br />
-      <br />
-      {showPass && (
-        <>
-          <input type='password' placeholder='New password' />
-          <input type='password' placeholder='Reapeat the password' />
-          <button>Change</button>
-        </>
-      )}
-
-      <hr />
-      <h2>Change Username</h2>
-      <button onClick={toggleShowName}>Go</button>
-      <br />
-      <br />
-      {showName && (
-        <>
-          <input type='text' placeholder='New username' />
-          <button>Change</button>
-        </>
-      )}
+      <ChangeUsername />
+      <ChangePassword />
+      {usernameSuccess && <h2>The username has been changed successfully</h2>}
+      {passwordSuccess && <h2>The password has been changed successfully</h2>}
     </div>
   );
 };

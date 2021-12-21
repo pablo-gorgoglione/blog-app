@@ -45,10 +45,10 @@ export const Navbar: React.FC<HeaderProps> = () => {
                 <span style={{ marginRight: '11px' }} onClick={handleSure}>
                   back
                 </span>
-                <span onClick={handleLogOut}>Logout</span>
                 <span className='spanOptions' onClick={goSettings}>
                   Settings
                 </span>
+                <span onClick={handleLogOut}>Logout</span>
               </div>
             ) : (
               <button className='ButtonUsername' onClick={handleSure}>

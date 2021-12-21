@@ -1,11 +1,13 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledPost = styled.div`
   padding: 20px;
   border-radius: 8px;
   background-color: rgb(42, 42, 42);
   min-width: 300px;
-  border: 2px solid rgb(114, 101, 67);
+  border: 2px solid rgb(70, 70, 70);
+
+  /* border: 2px solid rgb(114, 101, 67); */
 
   h1 {
     text-align: center;
@@ -31,7 +33,8 @@ export const StyledPost = styled.div`
     border-radius: 8px;
     /* background-color: rgb(44, 44, 44);  color viejo*/
     background-color: rgb(53, 53, 53);
-    border: 1px solid rgb(114, 101, 67);
+    /* border: 1px solid rgb(114, 101, 67); */
+    border: 2px solid rgb(70, 70, 70);
 
     /* padding-bottom: 20px; */
   }

@@ -4,7 +4,8 @@ export const StyledAbout = styled.div`
   padding: 20px;
   border-radius: 8px;
   background-color: rgb(42, 42, 42);
-  border: 2px solid rgb(114, 101, 67);
+  border: 2px solid rgb(70, 70, 70);
+  /* border: 2px solid rgb(114, 101, 67); */
   min-width: 300px;
   a {
     text-decoration: none;

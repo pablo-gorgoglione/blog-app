@@ -33,7 +33,12 @@ export const useRegister = (
   };
 
   useEffect(() => {
-    if (!errors.username && !errors.password && !errors.repeatPass) {
+    if (
+      !errors.username &&
+      !errors.password &&
+      !errors.repeatPass &&
+      formValues.username
+    ) {
       register({
         username: formValues.username,
         password: formValues.password,

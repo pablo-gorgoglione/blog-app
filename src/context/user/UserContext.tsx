@@ -10,6 +10,8 @@ interface IUserContext {
   logout: () => void;
   checkIsLog: () => void;
   register: (user: IUser) => void;
+  changePassword: (newpassword: string) => void;
+  changeUsername: (newusername: string) => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -52,6 +54,25 @@ export const UserProvider = ({ children }: props) => {
     cookies.remove('userInfo');
   };
 
+  const changeUsername = async (newusername: string) => {
+    const jwt: string = cookies.get('userInfo');
+    const data = await UserService.changeUsername(newusername, jwt);
+    if (data.data.Data) {
+      cookies.set('username', newusername, { path: '/' });
+      const username = newusername;
+      dispatch({ type: 'SET_USERNAME', payload: username });
+      console.log(data.data.Data);
+    }
+  };
+
+  const changePassword = async (newpassword: string) => {
+    const jwt: string = cookies.get('userInfo');
+    const data = await UserService.changePassword(newpassword, jwt);
+    if (data.data.Data) {
+      console.log(data.data.Data);
+    }
+  };
+
   const checkIsLog = () => {
     let logged = cookies.get('userInfo');
     let username = cookies.get('username');
@@ -65,7 +86,15 @@ export const UserProvider = ({ children }: props) => {
 
   return (
     <UserContext.Provider
-      value={{ register, login, logout, checkIsLog, userState }}
+      value={{
+        register,
+        login,
+        logout,
+        checkIsLog,
+        changePassword,
+        changeUsername,
+        userState,
+      }}
     >
       {children}
     </UserContext.Provider>
