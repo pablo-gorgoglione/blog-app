@@ -6,6 +6,7 @@ import { useState } from 'react';
 import LikeService from '../services/like';
 
 interface CommentProps {
+  userId: string;
   comment: IComment;
   idPost: string | undefined;
   jwt: string;
@@ -17,6 +18,7 @@ export const Comment: React.FC<CommentProps> = ({
   idPost,
   jwt,
   getAllComments,
+  userId,
 }) => {
   const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
 
@@ -51,18 +53,20 @@ export const Comment: React.FC<CommentProps> = ({
       <div className='usernamediv'>
         <p style={{ display: 'inline-block' }}> {comment.content}</p>
         <div className='btndiv'>
-          <button
-            style={{
-              display: 'inline-block',
-              marginLeft: '15px',
-            }}
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
+          {userId === comment.userId._id && (
+            //TODO - options component menu on each comment
+            <button
+              style={{
+                display: 'inline-block',
+                marginLeft: '15px',
+              }}
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
-
       <div className='Like'>
         <span>Likes: {likeCounter}</span>
         <div>

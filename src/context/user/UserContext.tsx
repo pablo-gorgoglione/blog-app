@@ -34,6 +34,8 @@ export const UserProvider = ({ children }: props) => {
     if (data.data.Data) {
       let username: string = data.data.Data.username;
       let jwt: string = data.data.Data.token;
+      console.log('id: ' + data.data.Data._id);
+      cookies.set('userId', data.data.Data._id, { path: '/' });
       cookies.set('username', username, { path: '/' });
       cookies.set('userInfo', jwt, { path: '/' });
       dispatch({ type: 'SET_ISLOG', payload: true });
@@ -52,6 +54,8 @@ export const UserProvider = ({ children }: props) => {
     dispatch({ type: 'SET_ISLOG', payload: false });
     dispatch({ type: 'SET_USERNAME', payload: '' });
     cookies.remove('userInfo');
+    cookies.remove('username');
+    cookies.remove('userId');
   };
 
   const changeUsername = async (newusername: string) => {

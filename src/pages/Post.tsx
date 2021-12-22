@@ -35,6 +35,7 @@ export const Post: React.FC<PostProps> = () => {
   const params = useParams();
   const idPost = params.idPost;
   const cookies = new Cookies();
+  let userId = cookies.get('userId');
   let jwt = cookies.get('userInfo');
 
   useEffect(() => {
@@ -155,6 +156,7 @@ export const Post: React.FC<PostProps> = () => {
               comments.map((c) => {
                 return (
                   <Comment
+                    userId={userId}
                     key={c._id}
                     comment={c}
                     idPost={post._id}

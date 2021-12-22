@@ -15,6 +15,7 @@ export interface IComment {
   _id: string;
   userId: {
     username: string;
+    _id: string;
   };
   postId: string;
   commentParentId?: string;
