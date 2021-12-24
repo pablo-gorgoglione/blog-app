@@ -15,10 +15,15 @@ import { UserProvider } from './context/user/UserContext';
 
 // color viejo "rgb(37, 37, 37)",
 const theme = {
-  colors: {
+  /* colors: {
     header: 'rgb(12, 12, 32)',
     body: 'rgb(12, 12, 32)',
     footer: 'rgb(12, 12, 32)',
+  }, */
+  colors: {
+    header: 'black',
+    body: 'black',
+    footer: 'black',
   },
 };
 const App: React.FC = () => {

@@ -10,6 +10,7 @@ import { DateFormat } from '../utils/DateFormatting';
 import { Comment } from '../components/Comment';
 import { IPost, IComment } from '../interfaces/interfaces';
 import { Spinner } from '../components/Spinner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface PostProps {}
 
@@ -120,70 +121,90 @@ export const Post: React.FC<PostProps> = () => {
   }
 
   return (
-    <StyledPost>
-      <button className='ButtonGoBack' onClick={handleGoBack}>
-        back
-      </button>
-      <div className='Content'>
-        <h1>{post.title}</h1>
-        <p>{post.datePublished}</p>
-        <p>{post.content}</p>
-      </div>
-      <div className='Like'>
-        <span>Likes: {post.likeCounter}</span>
-        <div>
-          <button className='LikeButton' onClick={handleLikeEvent}>
-            +1
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <StyledPost>
+          <button className='ButtonGoBack' onClick={handleGoBack}>
+            back
           </button>
-          <button className='DislikeButton' onClick={handleDislikeEvent}>
-            -1
-          </button>
-        </div>
-      </div>
-      {/* este div deberia ser otro componente */}
-      <div className='Comment'>
-        <div className='CommentButtons'>
-          <span className='CommentSpan' onClick={handleShowClick}>
-            Comments {comments.length}{' '}
-          </span>
-          <button onClick={toggleAddComment} className='ButtonAddComment'>
-            Add a comment
-          </button>
-        </div>
-        {show && (
-          <div>
-            {comments.length > 0 ? (
-              comments.map((c) => {
-                return (
-                  <Comment
-                    userId={userId}
-                    key={c._id}
-                    comment={c}
-                    idPost={post._id}
-                    jwt={jwt}
-                    getAllComments={getAllComments}
-                  />
-                );
-              })
-            ) : (
-              <p className='CommentP'>No comments</p>
+          <div className='Content'>
+            <h1>{post.title}</h1>
+            <p>{post.datePublished}</p>
+            <p>{post.content}</p>
+          </div>
+          <div className='Like'>
+            <span>Likes: {post.likeCounter}</span>
+            <div>
+              <button className='LikeButton' onClick={handleLikeEvent}>
+                +1
+              </button>
+              <button className='DislikeButton' onClick={handleDislikeEvent}>
+                -1
+              </button>
+            </div>
+          </div>
+          {/* este div deberia ser otro componente */}
+          <div className='Comment'>
+            <div className='CommentButtons'>
+              <span className='CommentSpan' onClick={handleShowClick}>
+                Comments {comments.length}{' '}
+              </span>
+              <button onClick={toggleAddComment} className='ButtonAddComment'>
+                Add a comment
+              </button>
+            </div>
+            {show && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {comments.length > 0 ? (
+                  comments.map((c) => {
+                    return (
+                      <Comment
+                        userId={userId}
+                        key={c._id}
+                        comment={c}
+                        idPost={post._id}
+                        jwt={jwt}
+                        getAllComments={getAllComments}
+                      />
+                    );
+                  })
+                ) : (
+                  <p className='CommentP'>No comments</p>
+                )}
+              </motion.div>
+            )}
+            {addComment && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className='CommentInput'
+              >
+                <input
+                  type='text'
+                  name='newcomment'
+                  value={newcomment}
+                  onChange={handleCommChange}
+                />
+                <button
+                  onClick={handleCommentSubmit}
+                  className='CommentButtonSend'
+                >
+                  Send
+                </button>
+              </motion.div>
             )}
           </div>
-        )}
-        {addComment && (
-          <div className='CommentInput'>
-            <input
-              type='text'
-              name='newcomment'
-              value={newcomment}
-              onChange={handleCommChange}
-            />
-            <button onClick={handleCommentSubmit} className='CommentButtonSend'>
-              Send
-            </button>
-          </div>
-        )}
-      </div>
-    </StyledPost>
+        </StyledPost>
+      </motion.div>
+    </AnimatePresence>
   );
 };

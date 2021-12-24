@@ -46,7 +46,9 @@ export const useSettings = () => {
   };
 
   // submits, validate the inputs values
-  const handleUsernameSubmit = () => {
+  const handleUsernameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log(e.currentTarget.value);
+    e.preventDefault();
     setUsernameError(validateUsername(username));
     setFirstUsername(false);
   };

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { StyledNav } from './styles/Nav.styled';
 import { useUser } from '../hooks/useUser';
+import { UserMenu } from './UserMenu';
 
 interface HeaderProps {}
 export const Navbar: React.FC<HeaderProps> = () => {
-  const [sure, setSure] = useState<boolean>(false);
   const { checkIsLog, logout, isLog, username } = useUser();
   let navigate = useNavigate();
 
@@ -13,54 +13,28 @@ export const Navbar: React.FC<HeaderProps> = () => {
     checkIsLog();
   }, []);
 
-  const handleLogOut = () => {
-    logout();
-    setSure(false);
-    return <Navigate to='../' />;
-  };
-  const goSettings = () => {
-    navigate(`./settings`);
-  };
   const logIn = () => {
     navigate(`./login`);
-  };
-  const handleSure = () => {
-    setSure(!sure);
   };
 
   return (
     <StyledNav>
-      <div>
-        <h1 className='blogApph1'>
-          <Link className='BlogAppLink' to=''>
-            Blog-App
-          </Link>
-        </h1>
-        <div>
-          <Link to='about'>About</Link>
+      <h1>
+        <Link className='BlogAppLink' to=''>
+          Blog-App
+        </Link>
+      </h1>
 
-          {isLog ? (
-            sure ? (
-              <div className='spanInDiv'>
-                <span style={{ marginRight: '11px' }} onClick={handleSure}>
-                  back
-                </span>
-                <span className='spanOptions' onClick={goSettings}>
-                  Settings
-                </span>
-                <span onClick={handleLogOut}>Logout</span>
-              </div>
-            ) : (
-              <button className='ButtonUsername' onClick={handleSure}>
-                {username}
-              </button>
-            )
-          ) : (
-            <span className='loginSpan' onClick={logIn}>
-              Login
-            </span>
-          )}
-        </div>
+      <div className='links-container'>
+        <Link to='about'>About</Link>
+
+        {isLog ? (
+          <UserMenu username={username} logout={logout} />
+        ) : (
+          <span className='loginSpan' onClick={logIn}>
+            Login
+          </span>
+        )}
       </div>
     </StyledNav>
   );

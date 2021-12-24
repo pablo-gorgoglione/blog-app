@@ -27,7 +27,12 @@ export const ChangeUsername: React.FC<ChangeUsernameProps> = () => {
         </button>
       </div>
       {showForm && (
-        <div className='inputdiv'>
+        <form
+          onSubmit={(e) => {
+            handleUsernameSubmit(e);
+          }}
+          className='inputdiv'
+        >
           <input
             onChange={handleChangeUsername}
             type='text'
@@ -35,12 +40,12 @@ export const ChangeUsername: React.FC<ChangeUsernameProps> = () => {
             name='username'
             value={username}
           />
-          <button className='submitbtn' onClick={handleUsernameSubmit}>
+          <button className='submitbtn' type='submit'>
             Submit
           </button>
           <br />
           <span>{usernameError}</span>
-        </div>
+        </form>
       )}
     </StyledChangeUsername>
   );
