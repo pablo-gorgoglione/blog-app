@@ -47,7 +47,6 @@ export const useSettings = () => {
 
   // submits, validate the inputs values
   const handleUsernameSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log(e.currentTarget.value);
     e.preventDefault();
     setUsernameError(validateUsername(username));
     setFirstUsername(false);
@@ -79,7 +78,6 @@ export const useSettings = () => {
       changePassword(passwordValues.password);
       setPasswordValues({ passRepeat: '', password: '' });
       setPasswordSuccess(true);
-      console.log(passwordSuccess);
     }
   }, [passwordError, firstPassword]);
 

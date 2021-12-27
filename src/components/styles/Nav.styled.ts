@@ -8,9 +8,11 @@ export const StyledNav = styled.nav`
   align-items: center;
   justify-content: space-around;
 
-  a {
+  a,
+  span {
     text-decoration: none;
     color: white;
+    cursor: pointer;
   }
 
   .links-container {

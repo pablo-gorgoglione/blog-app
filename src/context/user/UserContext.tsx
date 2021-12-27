@@ -31,10 +31,10 @@ export const UserProvider = ({ children }: props) => {
 
   const login = async (user: IUser) => {
     const data = await UserService.login(user);
+    console.log(data.data.Success);
     if (data.data.Data) {
       let username: string = data.data.Data.username;
       let jwt: string = data.data.Data.token;
-      console.log('id: ' + data.data.Data._id);
       cookies.set('userId', data.data.Data._id, { path: '/' });
       cookies.set('username', username, { path: '/' });
       cookies.set('userInfo', jwt, { path: '/' });
@@ -44,10 +44,12 @@ export const UserProvider = ({ children }: props) => {
   };
 
   const register = async (user: IUser) => {
-    const data = await UserService.register(user);
-    if (data.data.Data.user) {
-      console.log(data.data.Data.user);
-    }
+    await UserService.register(user).catch((err) => {
+      if (err.response.status === 400) {
+        console.log(err.response); // here I have the response.Success
+        console.log('username already exist');
+      }
+    });
   };
 
   const logout = () => {
@@ -65,7 +67,6 @@ export const UserProvider = ({ children }: props) => {
       cookies.set('username', newusername, { path: '/' });
       const username = newusername;
       dispatch({ type: 'SET_USERNAME', payload: username });
-      console.log(data.data.Data);
     }
   };
 
@@ -73,7 +74,6 @@ export const UserProvider = ({ children }: props) => {
     const jwt: string = cookies.get('userInfo');
     const data = await UserService.changePassword(newpassword, jwt);
     if (data.data.Data) {
-      console.log(data.data.Data);
     }
   };
 

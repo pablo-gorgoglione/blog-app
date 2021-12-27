@@ -23,7 +23,6 @@ export const UserMenu: React.FC<props> = ({ username, logout }) => {
 
   const toggleShow = () => {
     setShowMenu(!showMenu);
-    console.log('pero que: ', showMenu);
   };
   const handleLogOut = () => {
     logout();
@@ -31,9 +30,7 @@ export const UserMenu: React.FC<props> = ({ username, logout }) => {
     return <Navigate to='../' />;
   };
 
-  useEffect(() => {
-    console.log('pero que: ', showMenu);
-  }, [showMenu]);
+  useEffect(() => {}, [showMenu]);
 
   useEffect(() => {
     //Bind the event listener

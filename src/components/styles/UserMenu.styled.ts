@@ -30,6 +30,11 @@ export const StyledUserMenu = styled.nav<{ buttonWidth: number }>`
   }
 
   .dropdown button {
+    filter: brightness(85%);
+    &:hover {
+      filter: brightness(100%);
+      background-color: rgb(33, 33, 33);
+    }
     transition: 200ms;
     vertical-align: middle;
     padding: 0.6rem 2rem;
@@ -51,7 +56,7 @@ export const StyledUserMenu = styled.nav<{ buttonWidth: number }>`
     top: calc(100% + 0.2rem);
     padding: 0.75rem;
     border-radius: 0.55rem;
-    box-shadow: 0 2px 15px 0 rgb(81, 83, 81);
+    box-shadow: 0 2px 15px 0 rgb(81, 83, 81, 0.5);
     background-color: black;
   }
 

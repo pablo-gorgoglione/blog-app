@@ -32,14 +32,12 @@ export const Comment: React.FC<CommentProps> = ({
   const handleLike = async () => {
     const data = await LikeService.sendLikeComment(comment._id, idPost, jwt);
     if (data.data.Data) {
-      console.log(data.data.Data.likeCounter);
       setLikeCounter(data.data.Data.likeCounter);
     }
   };
   const handleDislike = async () => {
     const data = await LikeService.deleteLikeComment(comment._id, idPost, jwt);
     if (data.data.Data) {
-      console.log(data.data.Data.likeCounter);
       setLikeCounter(data.data.Data.likeCounter);
     }
   };

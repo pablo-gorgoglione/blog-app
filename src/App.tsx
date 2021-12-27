@@ -20,10 +20,15 @@ const theme = {
     body: 'rgb(12, 12, 32)',
     footer: 'rgb(12, 12, 32)',
   }, */
-  colors: {
+  /* colors: {
     header: 'black',
     body: 'black',
     footer: 'black',
+  }, */
+  colors: {
+    header: 'rgb(49, 107, 131)',
+    body: 'rgb(49, 107, 131)',
+    footer: 'rgb(49, 107, 131)',
   },
 };
 const App: React.FC = () => {

@@ -28,7 +28,8 @@ export const useRegister = (
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setErrors(ValidateRegister(formValues));
   };
 
@@ -43,7 +44,6 @@ export const useRegister = (
         username: formValues.username,
         password: formValues.password,
       });
-      console.log('Se envio :d');
       setFormValues({ username: '', password: '', repeatPass: '' });
     }
   }, [errors]);
