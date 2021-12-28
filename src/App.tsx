@@ -12,6 +12,8 @@ import { NotFound } from './pages/NotFound';
 import { Settings } from './pages/Settings';
 import { PostProvider } from './context/post/PostContext';
 import { UserProvider } from './context/user/UserContext';
+import { SnackBar } from './components/SnackBar';
+import { SnackBarProvider } from './context/snackBar/SnackBarContext';
 
 // color viejo "rgb(37, 37, 37)",
 const theme = {
@@ -20,44 +22,48 @@ const theme = {
     body: 'rgb(12, 12, 32)',
     footer: 'rgb(12, 12, 32)',
   }, */
-  /* colors: {
+  colors: {
     header: 'black',
     body: 'black',
     footer: 'black',
-  }, */
-  colors: {
+  },
+  /* colors: {
     header: 'rgb(49, 107, 131)',
     body: 'rgb(49, 107, 131)',
     footer: 'rgb(49, 107, 131)',
-  },
+  }, */
 };
 const App: React.FC = () => {
   return (
     //Providers
-    <PostProvider>
-      <UserProvider>
-        <ThemeProvider theme={theme}>
-          <GlobalStyles />
-          <BrowserRouter>
-            <StyledBody>
-              {/* ese div seria el styledContentbody? */}
-              <Navbar />
-              <main className='psudoBody'>
-                <Routes>
-                  <Route path='/login' element={<Login />} />
-                  <Route path='/about' element={<About />} />
-                  <Route path='/' element={<Home />} />
-                  <Route path='/settings' element={<Settings />} />
-                  <Route path='/register' element={<Register />} />
-                  <Route path='/post/:idPost' element={<Post />} />
-                  <Route path='*' element={<NotFound />} />
-                </Routes>
-              </main>
-            </StyledBody>
-          </BrowserRouter>
-        </ThemeProvider>
-      </UserProvider>
-    </PostProvider>
+    <SnackBarProvider>
+      <PostProvider>
+        <UserProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <BrowserRouter>
+              <StyledBody>
+                {/* ese div seria el styledContentbody? */}
+                <Navbar />
+                <main className='psudoBody'>
+                  <Routes>
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/about' element={<About />} />
+                    <Route path='/' element={<Home />} />
+                    <Route path='/settings' element={<Settings />} />
+                    <Route path='/register' element={<Register />} />
+                    <Route path='/post/:idPost' element={<Post />} />
+                    <Route path='*' element={<NotFound />} />
+                  </Routes>
+
+                  <SnackBar></SnackBar>
+                </main>
+              </StyledBody>
+            </BrowserRouter>
+          </ThemeProvider>
+        </UserProvider>
+      </PostProvider>
+    </SnackBarProvider>
   );
 };
 

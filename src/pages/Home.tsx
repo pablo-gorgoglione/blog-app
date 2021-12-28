@@ -3,7 +3,6 @@ import { PostList } from '../components/PostsList';
 import { Spinner } from '../components/Spinner';
 import { usePosts } from '../hooks/usePosts';
 import { motion, AnimatePresence } from 'framer-motion';
-
 interface Props {}
 //wtf
 export const Home: React.FC<Props> = () => {

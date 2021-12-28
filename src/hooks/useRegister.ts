@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import UserContext from '../context/user/UserContext';
 import { IFormValues } from '../interfaces/interfaces';
-import { useUser } from './useUser';
 
 export const useRegister = (
   ValidateRegister: (formValues: IFormValues) => IFormValues
 ) => {
-  const { register } = useUser();
+  const { register } = useContext(UserContext);
+
   //Errors messages state
   const [errors, setErrors] = useState<IFormValues>({
     username: '',

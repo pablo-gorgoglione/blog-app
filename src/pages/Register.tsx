@@ -11,10 +11,12 @@ export const Register: React.FC<RegisterProps> = () => {
 
   //custom hooks
 
+  //RegisterHook
   const { formValues, errors, handleChange, handleSubmit } =
     useRegister(ValidateRegister);
-
   const { password, repeatPass, username } = formValues;
+
+  //SnackBarHook
 
   return (
     <AnimatePresence>

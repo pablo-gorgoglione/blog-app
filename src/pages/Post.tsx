@@ -4,13 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import PostService from '../services/post';
 import LikeService from '../services/like';
-import CommentService from '../services/comment';
 import { StyledPost } from '../components/styles/Post.styled';
 import { DateFormat } from '../utils/DateFormatting';
-import { Comment } from '../components/Comment';
 import { IPost, IComment } from '../interfaces/interfaces';
 import { Spinner } from '../components/Spinner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CommentList } from '../components/Comment/CommentList';
 
 interface PostProps {}
 
@@ -30,9 +29,7 @@ export const Post: React.FC<PostProps> = () => {
   const [post, setPost] = useState<IPost>(postInitialValues);
   const [loading, setLoading] = useState<boolean>(false);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
-  const [show, setShow] = useState<boolean>(false);
-  const [addComment, setAddComment] = useState<boolean>(false);
-  const [newcomment, setNewComment] = useState<string>('');
+
   const params = useParams();
   const idPost = params.idPost;
   const cookies = new Cookies();
@@ -48,12 +45,6 @@ export const Post: React.FC<PostProps> = () => {
     changeDateFormat();
     getAllComments();
   }, [post.content]);
-
-  useEffect(() => {
-    if (!show) {
-      setAddComment(false);
-    }
-  }, [show]);
 
   const getPost = async () => {
     const res = await PostService.getOne(idPost, jwt);
@@ -75,14 +66,6 @@ export const Post: React.FC<PostProps> = () => {
     }
   };
 
-  const handleShowClick = () => {
-    setShow(!show);
-  };
-
-  const handleGoBack = () => {
-    navigate(`../`);
-  };
-
   const handleLikeEvent = async () => {
     const res = await LikeService.sendLikePost(idPost, jwt);
     if (res) {
@@ -99,23 +82,6 @@ export const Post: React.FC<PostProps> = () => {
     }
   };
 
-  const toggleAddComment = () => {
-    setAddComment(!addComment);
-  };
-
-  const handleCommChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(e.target.value);
-  };
-
-  const handleCommentSubmit = async () => {
-    const res = await CommentService.createOne(post._id, jwt, newcomment);
-    if (res.data.Data) {
-      getAllComments();
-      setNewComment('');
-      setShow(true);
-    }
-  };
-
   if (loading) {
     return <Spinner />;
   }
@@ -128,7 +94,7 @@ export const Post: React.FC<PostProps> = () => {
         exit={{ opacity: 0 }}
       >
         <StyledPost>
-          <button className='ButtonGoBack' onClick={handleGoBack}>
+          <button className='ButtonGoBack' onClick={() => navigate(`../`)}>
             back
           </button>
           <div className='Content'>
@@ -148,61 +114,13 @@ export const Post: React.FC<PostProps> = () => {
             </div>
           </div>
           {/* este div deberia ser otro componente */}
-          <div className='Comment'>
-            <div className='CommentButtons'>
-              <span className='CommentSpan' onClick={handleShowClick}>
-                Comments {comments.length}{' '}
-              </span>
-              <button onClick={toggleAddComment} className='ButtonAddComment'>
-                Add a comment
-              </button>
-            </div>
-            {show && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                {comments.length > 0 ? (
-                  comments.map((c) => {
-                    return (
-                      <Comment
-                        userId={userId}
-                        key={c._id}
-                        comment={c}
-                        idPost={post._id}
-                        jwt={jwt}
-                        getAllComments={getAllComments}
-                      />
-                    );
-                  })
-                ) : (
-                  <p className='CommentP'>No comments</p>
-                )}
-              </motion.div>
-            )}
-            {addComment && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className='CommentInput'
-              >
-                <input
-                  type='text'
-                  name='newcomment'
-                  value={newcomment}
-                  onChange={handleCommChange}
-                />
-                <button
-                  onClick={handleCommentSubmit}
-                  className='CommentButtonSend'
-                >
-                  Send
-                </button>
-              </motion.div>
-            )}
-          </div>
+          <CommentList
+            getAllComments={getAllComments}
+            post={post}
+            jwt={jwt}
+            comments={comments}
+            userId={userId}
+          ></CommentList>
         </StyledPost>
       </motion.div>
     </AnimatePresence>

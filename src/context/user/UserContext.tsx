@@ -3,6 +3,7 @@ import { IUserState, IUser } from '../../interfaces/interfaces';
 import UserService from '../../services/user';
 import userReducer from './UserReducer';
 import Cookies from 'universal-cookie';
+import { useSnackBar } from '../../hooks/useSnackBar';
 
 interface IUserContext {
   userState: IUserState;
@@ -26,12 +27,13 @@ export const UserProvider = ({ children }: props) => {
     username: '',
     isLog: false,
   };
+  //SnackBar hook
+  const { openSnackBar } = useSnackBar();
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
   const login = async (user: IUser) => {
     const data = await UserService.login(user);
-    console.log(data.data.Success);
     if (data.data.Data) {
       let username: string = data.data.Data.username;
       let jwt: string = data.data.Data.token;
@@ -46,8 +48,7 @@ export const UserProvider = ({ children }: props) => {
   const register = async (user: IUser) => {
     await UserService.register(user).catch((err) => {
       if (err.response.status === 400) {
-        console.log(err.response); // here I have the response.Success
-        console.log('username already exist');
+        openSnackBar('Username already exist');
       }
     });
   };
@@ -58,6 +59,7 @@ export const UserProvider = ({ children }: props) => {
     cookies.remove('userInfo');
     cookies.remove('username');
     cookies.remove('userId');
+    openSnackBar('Logged out');
   };
 
   const changeUsername = async (newusername: string) => {
@@ -66,6 +68,8 @@ export const UserProvider = ({ children }: props) => {
     if (data.data.Data) {
       cookies.set('username', newusername, { path: '/' });
       const username = newusername;
+      openSnackBar('Username has been changed');
+
       dispatch({ type: 'SET_USERNAME', payload: username });
     }
   };
@@ -74,6 +78,7 @@ export const UserProvider = ({ children }: props) => {
     const jwt: string = cookies.get('userInfo');
     const data = await UserService.changePassword(newpassword, jwt);
     if (data.data.Data) {
+      openSnackBar('Password has been changed');
     }
   };
 

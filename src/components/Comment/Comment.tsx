@@ -1,9 +1,10 @@
-import { IComment } from '../interfaces/interfaces';
-import { StyledComment } from './styles/Comment.styled';
-import CommentService from '../services/comment';
-import { DateFormat } from '../utils/DateFormatting';
+import { IComment } from '../../interfaces/interfaces';
+import { StyledComment } from '../styles/Comment.styled';
+import CommentService from '../../services/comment';
+import { DateFormat } from '../../utils/DateFormatting';
 import { useState } from 'react';
-import LikeService from '../services/like';
+import LikeService from '../../services/like';
+import { useSnackBar } from '../../hooks/useSnackBar';
 
 interface CommentProps {
   userId: string;
@@ -22,10 +23,13 @@ export const Comment: React.FC<CommentProps> = ({
 }) => {
   const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
 
+  const { openSnackBar } = useSnackBar();
+
   const handleDelete = async () => {
     const res = await CommentService.deleteOne(idPost, jwt, comment._id);
     if (res.data.Success === 1) {
       getAllComments();
+      openSnackBar('Comment deleted!');
     }
   };
 
