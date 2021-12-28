@@ -48,6 +48,7 @@ export const UserProvider = ({ children }: props) => {
   const register = async (user: IUser) => {
     await UserService.register(user).catch((err) => {
       if (err.response.status === 400) {
+        //here
         openSnackBar('Username already exist');
       }
     });
@@ -64,13 +65,22 @@ export const UserProvider = ({ children }: props) => {
 
   const changeUsername = async (newusername: string) => {
     const jwt: string = cookies.get('userInfo');
-    const data = await UserService.changeUsername(newusername, jwt);
-    if (data.data.Data) {
-      cookies.set('username', newusername, { path: '/' });
-      const username = newusername;
-      openSnackBar('Username has been changed');
-
-      dispatch({ type: 'SET_USERNAME', payload: username });
+    try {
+      const data = await UserService.changeUsername(newusername, jwt).catch(
+        (err) => {
+          openSnackBar(err.response.data.Message);
+        }
+      );
+      if (data) {
+        if (data.data.Success === 1) {
+          cookies.set('username', newusername, { path: '/' });
+          const username = newusername;
+          openSnackBar('Username has been changed');
+          dispatch({ type: 'SET_USERNAME', payload: username });
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
