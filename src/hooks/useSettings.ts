@@ -14,10 +14,6 @@ export const useSettings = () => {
   const [firstUsername, setFirstUsername] = useState<boolean>(true);
   const [firstPassword, setFirstPassword] = useState<boolean>(true);
 
-  //if the operation is successful this will be set to true
-  const [usernameSuccess, setUsernameSuccess] = useState<boolean>(false);
-  const [passwordSuccess, setPasswordSuccess] = useState<boolean>(false);
-
   //username states
   const [username, setUsername] = useState<string>('');
   const [usernameError, setUsernameError] = useState<string>('');
@@ -63,7 +59,6 @@ export const useSettings = () => {
     if (!usernameError && username) {
       changeUsername(username);
       setUsername('');
-      setUsernameSuccess(true);
       setFirstUsername(true);
     }
   }, [usernameError, firstUsername]);
@@ -77,7 +72,6 @@ export const useSettings = () => {
     ) {
       changePassword(passwordValues.password);
       setPasswordValues({ passRepeat: '', password: '' });
-      setPasswordSuccess(true);
     }
   }, [passwordError, firstPassword]);
 
@@ -86,8 +80,8 @@ export const useSettings = () => {
     handleUsernameSubmit,
     handleChangeUsername,
     handleChangePassword,
-    usernameSuccess,
-    passwordSuccess,
+    setPasswordValues,
+    setpasswordError,
     username,
     passwordValues,
     usernameError,

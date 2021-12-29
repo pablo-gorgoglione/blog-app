@@ -8,49 +8,64 @@ export const ChangePassword: React.FC<ChangePasswordProps> = () => {
   const {
     handleChangePassword,
     handlePasswordSubmit,
+    setPasswordValues,
+    setpasswordError,
     passwordValues,
     passwordError,
   } = useSettings();
-  const [showForm, setShowForm] = useState<boolean>(false);
-  const toggleView = () => {
-    setShowForm(!showForm);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const toggleIsOpen = () => {
+    setIsOpen(!isOpen);
+    setPasswordValues({ password: '', passRepeat: '' });
+    setpasswordError({ password: '', passRepeat: '' });
   };
 
   return (
     <StyledChangePassword>
-      <div className='tittleAndButton'>
+      <div className='tittle'>
         <h2>Password</h2>
-        <button className='changebtn' onClick={toggleView}>
-          Change
-        </button>
+        <div>
+          {isOpen ? (
+            <button className='buttoncancel' onClick={toggleIsOpen}>
+              Cancel
+            </button>
+          ) : (
+            <button className='buttonchange' onClick={toggleIsOpen}>
+              Change
+            </button>
+          )}
+        </div>
       </div>
 
-      {showForm && (
-        <>
-          <input
-            onChange={handleChangePassword}
-            type='password'
-            placeholder='New password'
-            name='password'
-            value={passwordValues.password}
-          />
-          <button className='submitbtn' onClick={handlePasswordSubmit}>
-            Submit
-          </button>
-          <br />
-          <p className='inputpassrepeat'>{passwordError.password}</p>
-          <br />
-          <input
-            onChange={handleChangePassword}
-            type='password'
-            value={passwordValues.passRepeat}
-            name='passRepeat'
-            placeholder='Reapeat the password'
-          />
-          <br />
-          <p>{passwordError.passRepeat}</p>
-          <br />
-        </>
+      {isOpen && (
+        <div className='inputs-div'>
+          <div>
+            <input
+              onChange={handleChangePassword}
+              type='password'
+              placeholder='New password'
+              name='password'
+              value={passwordValues.password}
+            />
+            <span>{passwordError.password} </span>
+          </div>
+          <div>
+            <input
+              onChange={handleChangePassword}
+              type='password'
+              value={passwordValues.passRepeat}
+              name='passRepeat'
+              placeholder='Reapeat the password'
+            />
+            <span>{passwordError.passRepeat}</span>
+          </div>
+          <div id='submitDiv'>
+            <button className='buttonSubmit' onClick={handlePasswordSubmit}>
+              Submit
+            </button>
+          </div>
+        </div>
       )}
     </StyledChangePassword>
   );
