@@ -1,9 +1,10 @@
 import http from '../http-common';
+const url: string = 'https://blog-api-pablogorgoglione.herokuapp.com';
 
 class CommentServices {
   createOne(idPost: string | undefined, jwt: string, comment: string) {
     return http.post(
-      `/post/${idPost}/comment`,
+      url + `/post/${idPost}/comment`,
       { content: comment },
       {
         headers: { Authorization: jwt },
@@ -15,7 +16,7 @@ class CommentServices {
     jwt: string,
     idComment: string | undefined
   ) {
-    return http.delete(`/post/${idPost}/comment/${idComment}`, {
+    return http.delete(url + `/post/${idPost}/comment/${idComment}`, {
       headers: { Authorization: jwt },
     });
   }
@@ -26,7 +27,7 @@ class CommentServices {
     comment: string
   ) {
     return http.put(
-      `/post/${idPost}/comment/${idComment}`,
+      url + `/post/${idPost}/comment/${idComment}`,
       { comment },
       { headers: { Authorization: jwt } }
     );

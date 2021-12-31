@@ -1,9 +1,10 @@
 import http from '../http-common';
+const url: string = 'https://blog-api-pablogorgoglione.herokuapp.com';
 
 class LikeServices {
   sendLikePost(idPost: string | undefined, jwt: string) {
     return http.post(
-      `/post/${idPost}/like`,
+      url + `/post/${idPost}/like`,
       {},
       {
         headers: { Authorization: jwt },
@@ -12,7 +13,7 @@ class LikeServices {
   }
 
   deleteLikePost(idPost: string | undefined, jwt: string) {
-    return http.delete(`/post/${idPost}/like`, {
+    return http.delete(url + `/post/${idPost}/like`, {
       headers: { Authorization: jwt },
     });
   }
@@ -23,7 +24,7 @@ class LikeServices {
     jwt: string
   ) {
     return http.post(
-      `/post/${idPost}/comment/${idComment}/like`,
+      url + `/post/${idPost}/comment/${idComment}/like`,
       {},
       {
         headers: { Authorization: jwt },
@@ -36,7 +37,7 @@ class LikeServices {
     idPost: string | undefined,
     jwt: string
   ) {
-    return http.delete(`/post/${idPost}/comment/${idComment}/like`, {
+    return http.delete(url + `/post/${idPost}/comment/${idComment}/like`, {
       headers: { Authorization: jwt },
     });
   }

@@ -1,10 +1,11 @@
 import http from '../http-common';
 import { IUser } from '../interfaces/interfaces';
 
+const url: string = 'https://blog-api-pablogorgoglione.herokuapp.com';
 class UserService {
   login(user: IUser) {
     const { password, username } = user;
-    return http.post('/user/login', {
+    return http.post(url + '/user/login', {
       username,
       password,
     });
@@ -12,7 +13,7 @@ class UserService {
 
   register(user: IUser) {
     const { password, username } = user;
-    return http.post('/user/register', {
+    return http.post(url + '/user/register', {
       username,
       password,
     });
@@ -20,7 +21,7 @@ class UserService {
 
   changeUsername(newusername: string, jwt: string) {
     return http.put(
-      '/user/username',
+      url + '/user/username',
       {
         newusername,
       },
@@ -32,7 +33,7 @@ class UserService {
 
   changePassword(newpassword: string, jwt: string) {
     return http.put(
-      '/user/password',
+      url + '/user/password',
       {
         newpassword,
       },
