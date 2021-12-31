@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IComment, IPost } from '../../interfaces/interfaces';
 import CommentService from '../../services/comment';
 import { Comment } from '../../components/Comment/Comment';
@@ -22,23 +22,12 @@ export const CommentList: React.FC<CommentListProps> = ({
   comments,
   userId,
 }) => {
-  const [isOpenInput, setIsOpenInput] = useState<boolean>(false);
   const [newcomment, setNewComment] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { openSnackBar } = useSnackBar();
 
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
-  };
-
-  useEffect(() => {
-    if (!isOpen) {
-      setIsOpenInput(false);
-    }
-  }, [isOpen]);
-
-  const toogleOpenInput = () => {
-    setIsOpenInput(!isOpenInput);
   };
 
   const handleCommChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,9 +55,6 @@ export const CommentList: React.FC<CommentListProps> = ({
       <div className='general-container'>
         <div className='header-container'>
           <span onClick={toggleIsOpen}>Comments {comments.length} </span>
-          {/*  <button onClick={toogleOpenInput}>
-          {isOpenInput ? 'Hide' : 'Add a comment'}
-        </button> */}
         </div>
         {isOpen && (
           <motion.div

@@ -43,9 +43,8 @@ const App: React.FC = () => {
             <GlobalStyles />
             <BrowserRouter>
               <StyledBody>
-                {/* ese div seria el styledContentbody? */}
                 <Navbar />
-                <main className='psudoBody'>
+                <main>
                   <Routes>
                     <Route path='/login' element={<Login />} />
                     <Route path='/about' element={<About />} />

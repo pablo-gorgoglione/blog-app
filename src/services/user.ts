@@ -1,7 +1,9 @@
 import http from '../http-common';
 import { IUser } from '../interfaces/interfaces';
+import { urlBACKEND } from '../interfaces/interfaces';
 
-const url: string = 'https://blog-api-pablogorgoglione.herokuapp.com';
+const url: string = urlBACKEND;
+
 class UserService {
   login(user: IUser) {
     const { password, username } = user;

@@ -1,5 +1,5 @@
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
 import { StyledUserMenu } from './styles/UserMenu.styled';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUserCircle } from 'react-icons/fa';
@@ -28,7 +28,7 @@ export const UserMenu: React.FC<props> = ({ username, logout }) => {
   const handleLogOut = () => {
     logout();
     setShowMenu(false);
-    return <Navigate to='../' />;
+    navigate(`../`);
   };
 
   return (

@@ -43,33 +43,43 @@ export const Login: React.FC<LoginProps> = () => {
         exit={{ opacity: 0 }}
       >
         <StyledLogin>
-          <form onSubmit={(e) => handleSubmit(e)} className='container'>
-            <div className='username-div'>
-              <label> Username </label>
-              <input
-                type='text'
-                name='username'
-                value={username}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
-            <div className='password-div'>
-              <label> Password </label>
-              <input
-                type='password'
-                name='password'
-                value={password}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-              />
-            </div>
+          <h1>Login</h1>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <section>
+              <div>
+                <label> Username </label>
+                <input
+                  type='text'
+                  name='username'
+                  value={username}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                />
+              </div>
+              <div>
+                <label> Password </label>
+                <input
+                  type='password'
+                  name='password'
+                  value={password}
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                />
+              </div>
+            </section>
             <button type='submit'>Login</button>
-            <p>Don't have an account?</p>
-            <Link to='../register'>Create one</Link>
           </form>
+          <div>
+            <p>
+              Don't have an account?{' '}
+              <span>
+                {' '}
+                <Link to='../register'>Create one</Link>
+              </span>
+            </p>
+          </div>
         </StyledLogin>
       </motion.div>
     </AnimatePresence>

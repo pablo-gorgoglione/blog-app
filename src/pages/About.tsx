@@ -49,20 +49,22 @@ export const About: React.FC<AboutProps> = () => {
                   <FaGithub />
                 </a>
               </div>
-              <a
-                href='https://github.com/pablo-gorgoglione/blog-app'
-                target='_blank'
-                rel='noreferrer noopener'
-              >
-                This app
-              </a>
-              <a
-                href='https://github.com/pablo-gorgoglione/blog-api'
-                target='_blank'
-                rel='noreferrer noopener'
-              >
-                Back end
-              </a>
+              <div>
+                <a
+                  href='https://github.com/pablo-gorgoglione/blog-app'
+                  target='_blank'
+                  rel='noreferrer noopener'
+                >
+                  front-end
+                </a>
+                <a
+                  href='https://github.com/pablo-gorgoglione/blog-api'
+                  target='_blank'
+                  rel='noreferrer noopener'
+                >
+                  back-end
+                </a>
+              </div>
             </div>
             <a
               href='https://www.instagram.com/pablo.gorg/'

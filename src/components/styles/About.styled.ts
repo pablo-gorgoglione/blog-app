@@ -13,10 +13,15 @@ export const StyledAbout = styled.div`
   }
   a {
     text-decoration: none;
-    color: #ffffff;
+    color: rgb(160, 160, 160);
+
     font-weight: bold;
     &:hover {
+      text-decoration: underline;
     }
+  }
+  a > svg {
+    color: white;
   }
   h2 {
     margin: 0;
@@ -26,9 +31,14 @@ export const StyledAbout = styled.div`
   .link-container > div:first-child {
     display: flex;
     flex-direction: row;
-    column-gap: 15px;
+    column-gap: 11px;
     justify-content: flex-start;
     align-items: center;
+  }
+  .link-container > div:first-child > div:last-child {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
   }
   .link-container {
     display: flex;

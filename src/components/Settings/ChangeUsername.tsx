@@ -8,6 +8,8 @@ export const ChangeUsername: React.FC<ChangeUsernameProps> = () => {
   const {
     handleChangeUsername,
     handleUsernameSubmit,
+    setUsername,
+    setUsernameError,
     username,
     usernameError,
   } = useSettings();
@@ -16,6 +18,8 @@ export const ChangeUsername: React.FC<ChangeUsernameProps> = () => {
 
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
+    setUsername('');
+    setUsernameError('');
   };
 
   return (

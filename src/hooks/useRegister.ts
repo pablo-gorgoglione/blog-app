@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserContext from '../context/user/UserContext';
 import { IFormValues } from '../interfaces/interfaces';
 
@@ -6,6 +7,7 @@ export const useRegister = (
   ValidateRegister: (formValues: IFormValues) => IFormValues
 ) => {
   const { register } = useContext(UserContext);
+  let navigate = useNavigate();
 
   //Errors messages state
   const [errors, setErrors] = useState<IFormValues>({
@@ -46,7 +48,9 @@ export const useRegister = (
         password: formValues.password,
       });
       setFormValues({ username: '', password: '', repeatPass: '' });
+      navigate('../login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errors]);
 
   return { handleChange, handleSubmit, formValues, errors };

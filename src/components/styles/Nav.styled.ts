@@ -8,8 +8,8 @@ export const StyledNav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 50px;
   min-width: 800px;
+  margin: 0px 100px 0px 80px;
   /* END NAV */
 
   a,
@@ -22,7 +22,7 @@ export const StyledNav = styled.nav`
   .links-container {
     display: flex;
     flex-direction: row;
-    gap: 10rem;
+    gap: 40px;
   }
 
   .user {

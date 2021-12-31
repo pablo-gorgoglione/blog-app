@@ -82,6 +82,8 @@ export const useSettings = () => {
     handleChangePassword,
     setPasswordValues,
     setpasswordError,
+    setUsername,
+    setUsernameError,
     username,
     passwordValues,
     usernameError,

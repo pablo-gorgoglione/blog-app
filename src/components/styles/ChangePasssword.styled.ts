@@ -4,17 +4,18 @@ export const StyledChangePassword = styled.div`
   /* main div */
   border-radius: 8px;
   border: 2px solid rgb(70, 70, 70);
-  min-width: 300px;
   padding: 20px;
   /* end main div  */
 
   .tittle {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
   }
   .tittle > h2 {
     margin-left: 20px;
   }
+
   .tittle > div {
     display: flex;
     align-items: center;
@@ -82,7 +83,7 @@ export const StyledChangePassword = styled.div`
     border-width: 0.1rem;
     border-color: white;
     max-width: 20rem;
-    background-color: #08d;
+    background-color: rgb(33, 33, 33);
     border-radius: 12px;
     color: #eee;
     cursor: pointer;

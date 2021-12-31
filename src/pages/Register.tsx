@@ -3,6 +3,7 @@ import { StyledRegister } from '../components/styles/Register.styled';
 import { useRegister } from '../hooks/useRegister';
 import ValidateRegister from '../utils/ValidateRegister';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 interface RegisterProps {}
 
@@ -26,42 +27,51 @@ export const Register: React.FC<RegisterProps> = () => {
         exit={{ opacity: 0 }}
       >
         <StyledRegister>
-          <form onSubmit={(e) => handleSubmit(e)} className='container'>
-            <h1>Register</h1>
-            <div className='username-div'>
-              <h3>Username</h3>
-              <input
-                type='text'
-                onChange={handleChange}
-                value={username}
-                name='username'
-              />
-              <span>{errors.username}</span>
-            </div>
-            <div className='password-div'>
-              <h3>Password</h3>
-              <input
-                type='password'
-                onChange={handleChange}
-                value={password}
-                name='password'
-              />
-              <span>{errors.password}</span>
-              <div className='repeatpass'>
+          <h1>Register</h1>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <section>
+              <div>
+                <label>Username</label>
+                <input
+                  type='text'
+                  onChange={handleChange}
+                  value={username}
+                  name='username'
+                />
+                <span>{errors.username}</span>
+              </div>
+              <div>
+                <label>Password</label>
+                <input
+                  type='password'
+                  onChange={handleChange}
+                  value={password}
+                  name='password'
+                />
+                <span>{errors.password}</span>
+              </div>
+              <div>
                 <p>Repeat the password</p>
                 <input
                   type='password'
                   onChange={handleChange}
                   value={repeatPass}
                   name='repeatPass'
-                  // disabled={true}
                 />
                 <span>{errors.repeatPass}</span>
               </div>
-            </div>
-
+            </section>
             <button type='submit'>Submit</button>
           </form>
+          <div className='text'>
+            <p>
+              Already have an account?{' '}
+              <span>
+                {' '}
+                <Link to='../login'>Login</Link>
+              </span>
+            </p>
+          </div>
         </StyledRegister>
       </motion.div>
     </AnimatePresence>

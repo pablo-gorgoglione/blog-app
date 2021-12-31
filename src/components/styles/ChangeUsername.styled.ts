@@ -4,14 +4,12 @@ export const StyledChangeUsername = styled.div`
   /* main div */
   border-radius: 8px;
   border: 2px solid rgb(70, 70, 70);
-  min-width: 300px;
   padding: 20px;
-  margin-bottom: 40px;
-  margin-top: 30px;
   /* end main div  */
 
   .tittle {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
   }
   .tittle > h2 {
@@ -87,8 +85,6 @@ export const StyledChangeUsername = styled.div`
     background-color: #303245;
     border-radius: 12px;
     font-size: 15px;
-    background-color: #303245;
-    border-radius: 12px;
     border: 0;
     box-sizing: border-box;
     color: #eee;
@@ -108,7 +104,7 @@ export const StyledChangeUsername = styled.div`
     border-width: 0.1rem;
     border-color: white;
     max-width: 20rem;
-    background-color: #08d;
+    background-color: rgb(33, 33, 33);
     border-radius: 12px;
     color: #eee;
     cursor: pointer;

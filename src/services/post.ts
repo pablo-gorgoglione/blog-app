@@ -1,5 +1,7 @@
 import http from '../http-common';
-const url: string = 'https://blog-api-pablogorgoglione.herokuapp.com';
+import { urlBACKEND } from '../interfaces/interfaces';
+
+const url: string = urlBACKEND;
 
 class PostService {
   getAll(jwt: string) {
