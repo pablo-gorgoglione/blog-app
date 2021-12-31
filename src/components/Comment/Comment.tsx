@@ -5,6 +5,10 @@ import { DateFormat } from '../../utils/DateFormatting';
 import { useState } from 'react';
 import LikeService from '../../services/like';
 import { useSnackBar } from '../../hooks/useSnackBar';
+import { FaHeart } from 'react-icons/fa';
+import { FaTrashAlt } from 'react-icons/fa';
+// import { FaUserCircle } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
 
 interface CommentProps {
   userId: string;
@@ -48,39 +52,39 @@ export const Comment: React.FC<CommentProps> = ({
 
   return (
     <StyledComment>
-      <div className='usernamediv'>
-        <b>{comment.userId.username}</b>
-        <span style={{ fontSize: '12px' }}>{DateFormat(comment.date)}</span>
-      </div>
-      <div className='usernamediv'>
-        <p style={{ display: 'inline-block' }}> {comment.content}</p>
-        <div className='btndiv'>
-          {userId === comment.userId._id && (
-            //TODO - options component menu on each comment
-            <button
-              style={{
-                display: 'inline-block',
-                marginLeft: '15px',
-              }}
-              onClick={handleDelete}
-            >
-              Delete
+      <div className='container'>
+        <div className='usernamediv'>
+          <div className={userId === comment.userId._id ? 'mediv' : ''}>
+            <FaUser />
+            <b>{comment.userId.username}</b>
+          </div>
+          <span>{DateFormat(comment.date)}</span>
+        </div>
+        <div className='content-container'>
+          <p> {comment.content}</p>
+        </div>
+        <div className='btns'>
+          <div>
+            <FaHeart />
+            {likeCounter}
+          </div>
+          <div className='delete'>
+            {userId === comment.userId._id && (
+              //TODO - options component menu on each comment
+              <FaTrashAlt onClick={handleDelete} />
+            )}
+          </div>
+          <div>
+            this will be deleted soon...
+            <button className='LikeButton' onClick={handleLike}>
+              +1
             </button>
-          )}
+            <button className='DislikeButton' onClick={handleDislike}>
+              -1
+            </button>
+          </div>
         </div>
       </div>
-      <div className='Like'>
-        <span>Likes: {likeCounter}</span>
-        <div>
-          <button className='LikeButton' onClick={handleLike}>
-            +1
-          </button>
-          <button className='DislikeButton' onClick={handleDislike}>
-            -1
-          </button>
-        </div>
-      </div>
-      <hr />
     </StyledComment>
   );
 };

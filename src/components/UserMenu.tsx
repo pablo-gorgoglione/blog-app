@@ -2,6 +2,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useRef, useState, useEffect } from 'react';
 import { StyledUserMenu } from './styles/UserMenu.styled';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaUserCircle } from 'react-icons/fa';
+import { FaCaretDown } from 'react-icons/fa';
 
 interface props {
   username: string;
@@ -11,9 +13,7 @@ interface props {
 export const UserMenu: React.FC<props> = ({ username, logout }) => {
   let navigate = useNavigate();
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const [buttonWidth, setButtonWidth] = useState<number>(0);
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const goSettings = () => {
@@ -24,43 +24,20 @@ export const UserMenu: React.FC<props> = ({ username, logout }) => {
   const toggleShow = () => {
     setShowMenu(!showMenu);
   };
+
   const handleLogOut = () => {
     logout();
     setShowMenu(false);
     return <Navigate to='../' />;
   };
 
-  useEffect(() => {}, [showMenu]);
-
-  useEffect(() => {
-    //Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
-
-    //Close menu if clicked outside
-    function handleClickOutside(event: MouseEvent | TouchEvent) {
-      if (dropdownRef && !dropdownRef.current?.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
-    }
-
-    //Update button width.
-    if (buttonRef.current) {
-      setButtonWidth(buttonRef.current.offsetWidth);
-    }
-
-    //unbind the event listener
-    return () => {
-      //clean up
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [buttonRef.current, dropdownRef]);
-
   return (
-    <StyledUserMenu buttonWidth={buttonWidth}>
+    <StyledUserMenu>
       <div className='dropdown'>
-        <button ref={buttonRef} onClick={toggleShow}>
-          {username}
-        </button>
+        <div onClick={toggleShow}>
+          <FaUserCircle />
+          <FaCaretDown />
+        </div>
         <AnimatePresence>
           {showMenu && (
             <motion.div
@@ -70,17 +47,20 @@ export const UserMenu: React.FC<props> = ({ username, logout }) => {
               ref={dropdownRef}
               className='dropdown-menu'
             >
-              <ul className='user-options'>
+              <div>
+                <p>Singed in as</p>
+                <p>{username}</p>
+              </div>
+              <div className='divider'></div>
+              <ul>
                 <li>
                   <div>Saved</div>
                 </li>
                 <li>
                   <div onClick={goSettings}>Settings</div>
                 </li>
-                <li>
-                  <div className='logout' onClick={handleLogOut}>
-                    Logout
-                  </div>
+                <li className='logout'>
+                  <div onClick={handleLogOut}>Logout</div>
                 </li>
               </ul>
             </motion.div>

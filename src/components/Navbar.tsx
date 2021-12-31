@@ -29,7 +29,9 @@ export const Navbar: React.FC<HeaderProps> = () => {
         <Link to='about'>About</Link>
 
         {isLog ? (
-          <UserMenu username={username} logout={logout} />
+          <div className='user'>
+            <UserMenu username={username} logout={logout} />
+          </div>
         ) : (
           <span className='loginSpan' onClick={logIn}>
             Login

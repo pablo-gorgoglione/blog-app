@@ -1,46 +1,37 @@
 import styled from 'styled-components';
 
 export const StyledPost = styled.div`
-  padding: 20px;
-  border-radius: 8px;
-  background-color: rgb(42, 42, 42);
-  min-width: 300px;
-  border: 2px solid rgb(70, 70, 70);
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  min-width: 400px;
+
+  .postcontainer {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: rgb(42, 42, 42);
+    min-width: 300px;
+    border: 2px solid rgb(70, 70, 70);
+  }
 
   /* border: 2px solid rgb(114, 101, 67); */
 
   h1 {
     text-align: center;
   }
-  button {
-    cursor: pointer;
-    display: inline-block;
-  }
-  input {
-    display: inline-block;
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    height: 25px;
-  }
-  .Like {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .Comment {
-    padding: 15px 15px 0px 15px;
-    border-radius: 8px;
-    /* background-color: rgb(44, 44, 44);  color viejo*/
-    background-color: rgb(53, 53, 53);
-    /* border: 1px solid rgb(114, 101, 67); */
-    border: 2px solid rgb(70, 70, 70);
 
-    /* padding-bottom: 20px; */
+  .likecontainer {
+    display: flex;
+    column-gap: 5px;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    align-items: center;
   }
-  .CommentSpan {
+
+  .likeIcon {
     cursor: pointer;
   }
+
   .CommentButtons {
     align-items: center;
     display: flex;
@@ -48,22 +39,7 @@ export const StyledPost = styled.div`
     padding-bottom: 15px;
     /* padding-bottom: 20px; */
   }
-  .CommentP {
-    padding-bottom: 20px;
-  }
-  .CommentButtonSend {
-    margin-top: 3px;
-    height: 25px;
-    background-color: rgb(44, 44, 44);
-    border-radius: 8px;
-    color: white;
-  }
-  .CommentInput {
-    display: flex;
-  }
-  .DislikeButton {
-    margin-left: 10px;
-  }
+
   .ButtonGoBack {
     border-radius: 8px;
     padding: 7px 20px;
@@ -73,13 +49,7 @@ export const StyledPost = styled.div`
       background-color: #383838;
     }
   }
-  .ButtonAddComment {
-    border-radius: 8px;
-    padding: 7px 20px;
-    background-color: rgb(44, 44, 44);
-    color: white;
-    &:hover {
-      background-color: #383838;
-    }
+  .Content > p:last-child {
+    font-size: 20px;
   }
 `;

@@ -10,6 +10,7 @@ import { IPost, IComment } from '../interfaces/interfaces';
 import { Spinner } from '../components/Spinner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CommentList } from '../components/Comment/CommentList';
+import { FaHeart } from 'react-icons/fa';
 
 interface PostProps {}
 
@@ -66,7 +67,7 @@ export const Post: React.FC<PostProps> = () => {
     }
   };
 
-  const handleLikeEvent = async () => {
+  /* const handleLikeEvent = async () => {
     const res = await LikeService.sendLikePost(idPost, jwt);
     if (res) {
       let newlikecounter: number = res.data.Data.likeCounter;
@@ -80,7 +81,7 @@ export const Post: React.FC<PostProps> = () => {
       let newlikecounter: number = res.data.Data.likeCounter;
       setPost({ ...post, likeCounter: newlikecounter });
     }
-  };
+  }; */
 
   if (loading) {
     return <Spinner />;
@@ -94,33 +95,29 @@ export const Post: React.FC<PostProps> = () => {
         exit={{ opacity: 0 }}
       >
         <StyledPost>
-          <button className='ButtonGoBack' onClick={() => navigate(`../`)}>
-            back
-          </button>
-          <div className='Content'>
-            <h1>{post.title}</h1>
-            <p>{post.datePublished}</p>
-            <p>{post.content}</p>
-          </div>
-          <div className='Like'>
-            <span>Likes: {post.likeCounter}</span>
-            <div>
-              <button className='LikeButton' onClick={handleLikeEvent}>
-                +1
-              </button>
-              <button className='DislikeButton' onClick={handleDislikeEvent}>
-                -1
-              </button>
+          <div className='postcontainer'>
+            <button className='ButtonGoBack' onClick={() => navigate(`../`)}>
+              back
+            </button>
+            <div className='Content'>
+              <h1>{post.title}</h1>
+              <p>{post.datePublished}</p>
+              <p>{post.content}</p>
+            </div>
+            <div className='likecontainer'>
+              <FaHeart className='likeIcon' />
+              {post.likeCounter}
             </div>
           </div>
-          {/* este div deberia ser otro componente */}
-          <CommentList
-            getAllComments={getAllComments}
-            post={post}
-            jwt={jwt}
-            comments={comments}
-            userId={userId}
-          ></CommentList>
+          <div className='commentcontainer'>
+            <CommentList
+              getAllComments={getAllComments}
+              post={post}
+              jwt={jwt}
+              comments={comments}
+              userId={userId}
+            ></CommentList>
+          </div>
         </StyledPost>
       </motion.div>
     </AnimatePresence>

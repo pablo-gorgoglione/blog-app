@@ -60,7 +60,6 @@ export const StyledChangePassword = styled.div`
   input {
     background-color: #303245;
     border-radius: 12px;
-    font-size: 15px;
     background-color: #303245;
     border-radius: 12px;
     border: 0;

@@ -5,6 +5,7 @@ import { Comment } from '../../components/Comment/Comment';
 import { motion } from 'framer-motion';
 import { CommentForm } from './CommentForm';
 import { useSnackBar } from '../../hooks/useSnackBar';
+import { StyledCommentList } from '../styles/CommentList.styled';
 
 interface CommentListProps {
   getAllComments: () => void;
@@ -21,22 +22,23 @@ export const CommentList: React.FC<CommentListProps> = ({
   comments,
   userId,
 }) => {
-  const [addComment, setAddComment] = useState<boolean>(false);
+  const [isOpenInput, setIsOpenInput] = useState<boolean>(false);
   const [newcomment, setNewComment] = useState<string>('');
-  const [show, setShow] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { openSnackBar } = useSnackBar();
 
-  const handleShowClick = () => {
-    setShow(!show);
+  const toggleIsOpen = () => {
+    setIsOpen(!isOpen);
   };
-  useEffect(() => {
-    if (!show) {
-      setAddComment(false);
-    }
-  }, [show]);
 
-  const toggleAddComment = () => {
-    setAddComment(!addComment);
+  useEffect(() => {
+    if (!isOpen) {
+      setIsOpenInput(false);
+    }
+  }, [isOpen]);
+
+  const toogleOpenInput = () => {
+    setIsOpenInput(!isOpenInput);
   };
 
   const handleCommChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,27 +52,30 @@ export const CommentList: React.FC<CommentListProps> = ({
       openSnackBar('Comment created!');
       getAllComments();
       setNewComment('');
-      setShow(true);
+      setIsOpen(true);
     }
   };
   return (
-    <div>
-      <div className='Comment'>
-        <div className='CommentButtons'>
-          <span className='CommentSpan' onClick={handleShowClick}>
-            Comments {comments.length}{' '}
-          </span>
-          {!show && (
-            <button onClick={toggleAddComment} className='ButtonAddComment'>
-              Add a comment
-            </button>
-          )}
+    <StyledCommentList>
+      <CommentForm
+        newcomment={newcomment}
+        handleCommChange={handleCommChange}
+        handleCommentSubmit={handleCommentSubmit}
+      ></CommentForm>
+
+      <div className='general-container'>
+        <div className='header-container'>
+          <span onClick={toggleIsOpen}>Comments {comments.length} </span>
+          {/*  <button onClick={toogleOpenInput}>
+          {isOpenInput ? 'Hide' : 'Add a comment'}
+        </button> */}
         </div>
-        {show && (
+        {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className='main-container'
           >
             {comments.length > 0 ? (
               comments.map((c) => {
@@ -90,19 +95,7 @@ export const CommentList: React.FC<CommentListProps> = ({
             )}
           </motion.div>
         )}
-        {show && (
-          <button onClick={toggleAddComment} className='ButtonAddComment'>
-            Add a comment
-          </button>
-        )}
-        {addComment && (
-          <CommentForm
-            newcomment={newcomment}
-            handleCommChange={handleCommChange}
-            handleCommentSubmit={handleCommentSubmit}
-          ></CommentForm>
-        )}
       </div>
-    </div>
+    </StyledCommentList>
   );
 };

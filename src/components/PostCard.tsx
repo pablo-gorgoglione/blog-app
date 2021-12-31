@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IPost } from '../interfaces/interfaces';
 import { StyledPostCard } from './styles/PostCard.styled';
+import { FaHeart } from 'react-icons/fa';
 
 interface Props {
   post: IPost;
@@ -20,10 +21,13 @@ export const PostCard: React.FC<Props> = ({ post }) => {
         <p>{post.content.substr(0, 100) + ' ...'}</p>
       )}
       {/* <p>{post.content} </p> */}
-      <section>
+      <div className='container'>
         <p>Tags: {post.tags.map((t) => t + ' ')} </p>
-        <p>likes: {post.likeCounter} </p>
-      </section>
+        <div>
+          <FaHeart />
+          {post.likeCounter}
+        </div>
+      </div>
     </StyledPostCard>
   );
 };

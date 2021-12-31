@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyledAbout } from '../components/styles/About.styled';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub } from 'react-icons/fa';
+import { FaInstagram } from 'react-icons/fa';
 
 interface AboutProps {}
 
@@ -12,52 +14,63 @@ export const About: React.FC<AboutProps> = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          className='main-container'
         >
-          <h2>Some information about the page</h2>
-          <p>
-            For the front-end i'm using React with TypeScript and the most
-            important packages to highlight are :
-          </p>
-          <ul>
-            <li>styled-components</li>
-            <li>react-router-dom</li>
-            <li>axios</li>
-          </ul>
+          <div>
+            <h2>Some information about the page</h2>
+            <p>
+              For the front-end i'm using React with TypeScript and the most
+              important packages to highlight are :
+            </p>
+            <ul>
+              <li>styled-components</li>
+              <li>react-router-dom</li>
+              <li>axios</li>
+            </ul>
 
-          <p>
-            For the back-end I'm using Node js without TypeScript and the most
-            important packages to highlight are :
-          </p>
-          <ul>
-            <li>express</li>
-            <li>mongoose</li>
-            <li>passport-jwt</li>
-          </ul>
-          <br />
-          <div className='LinkContainer'>
+            <p>
+              For the back-end I'm using Node js without TypeScript and the most
+              important packages to highlight are :
+            </p>
+            <ul>
+              <li>express</li>
+              <li>mongoose</li>
+              <li>passport-jwt</li>
+            </ul>
+          </div>
+          <div className='link-container'>
             <div>
-              <p>
-                Here the repository :{' '}
+              <div>
                 <a
-                  href='https://github.com/pablo-gorgoglione/blog-api'
+                  href='https://github.com/pablo-gorgoglione'
                   target='_blank'
                   rel='noreferrer noopener'
                 >
-                  GitHub
+                  <FaGithub />
                 </a>
-              </p>
-              <p>
-                Here are my{' '}
-                <a
-                  href='https://github.com/pablo-gorgoglione?tab=repositories'
-                  target='_blank'
-                  rel='noreferrer noopener'
-                >
-                  others projects
-                </a>
-              </p>
+              </div>
+              <a
+                href='https://github.com/pablo-gorgoglione/blog-app'
+                target='_blank'
+                rel='noreferrer noopener'
+              >
+                This app
+              </a>
+              <a
+                href='https://github.com/pablo-gorgoglione/blog-api'
+                target='_blank'
+                rel='noreferrer noopener'
+              >
+                Back end
+              </a>
             </div>
-            <div className='LinkIcons'>icos</div>
+            <a
+              href='https://www.instagram.com/pablo.gorg/'
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              <FaInstagram />
+            </a>
           </div>
         </motion.div>
       </StyledAbout>

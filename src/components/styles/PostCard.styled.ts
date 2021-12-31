@@ -18,9 +18,14 @@ export const StyledPostCard = styled.div`
   p {
     display: inline-block;
   }
-  section {
+  .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .container > div {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 5px;
   }
 `;

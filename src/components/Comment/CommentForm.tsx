@@ -17,7 +17,6 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className='CommentInput'
       onSubmit={handleCommentSubmit}
     >
       <input
@@ -25,10 +24,12 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         name='newcomment'
         value={newcomment}
         onChange={handleCommChange}
+        placeholder='Add a public comment...'
       />
-      <button type='submit' className='CommentButtonSend'>
-        Send
-      </button>
+
+      <div>
+        <button type='submit'>Send</button>
+      </div>
     </motion.form>
   );
 };
