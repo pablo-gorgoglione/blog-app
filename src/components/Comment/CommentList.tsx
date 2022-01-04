@@ -63,7 +63,7 @@ export const CommentList: React.FC<CommentListProps> = ({
             exit={{ opacity: 0 }}
             className='main-container'
           >
-            {comments.length > 0 ? (
+            {comments.length > 0 &&
               comments.map((c) => {
                 return (
                   <Comment
@@ -75,10 +75,7 @@ export const CommentList: React.FC<CommentListProps> = ({
                     getAllComments={getAllComments}
                   />
                 );
-              })
-            ) : (
-              <p className='CommentP'>No comments</p>
-            )}
+              })}
           </motion.div>
         )}
       </div>

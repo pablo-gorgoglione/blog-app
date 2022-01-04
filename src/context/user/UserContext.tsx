@@ -13,6 +13,7 @@ interface IUserContext {
   register: (user: IUser) => void;
   changePassword: (newpassword: string) => void;
   changeUsername: (newusername: string) => void;
+  setLikedPost: (likedPosts: string[]) => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -24,9 +25,12 @@ interface props {
 export const UserProvider = ({ children }: props) => {
   const cookies = new Cookies();
   const initialState: IUserState = {
-    username: '',
     isLog: false,
+    isLoading: true,
+    username: '',
+    likedPost: [],
   };
+
   //SnackBar hook
   const { openSnackBar } = useSnackBar();
 
@@ -35,6 +39,7 @@ export const UserProvider = ({ children }: props) => {
   const login = async (user: IUser) => {
     const data = await UserService.login(user);
     if (data.data.Data) {
+      let likedPosts: [string] = data.data.Data.likedPosts;
       let username: string = data.data.Data.username;
       let jwt: string = data.data.Data.token;
       cookies.set('userId', data.data.Data._id, { path: '/' });
@@ -42,13 +47,15 @@ export const UserProvider = ({ children }: props) => {
       cookies.set('userInfo', jwt, { path: '/' });
       dispatch({ type: 'SET_ISLOG', payload: true });
       dispatch({ type: 'SET_USERNAME', payload: username });
+      dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+      dispatch({ type: 'SET_ISLOADING', payload: false });
     }
   };
 
   const register = async (user: IUser) => {
     await UserService.register(user).catch((err) => {
       if (err.response.status === 400) {
-        //here
+        // status code response
         openSnackBar('Username already exist');
       }
     });
@@ -57,6 +64,8 @@ export const UserProvider = ({ children }: props) => {
   const logout = () => {
     dispatch({ type: 'SET_ISLOG', payload: false });
     dispatch({ type: 'SET_USERNAME', payload: '' });
+    dispatch({ type: 'SET_LIKEDPOSTS', payload: [''] });
+
     cookies.remove('userInfo');
     cookies.remove('username');
     cookies.remove('userId');
@@ -92,15 +101,33 @@ export const UserProvider = ({ children }: props) => {
     }
   };
 
-  const checkIsLog = () => {
-    let logged = cookies.get('userInfo');
-    let username = cookies.get('username');
-    if (logged) {
+  const checkIsLog = async () => {
+    let jwt = cookies.get('userInfo');
+    let user_id = cookies.get('userId');
+    if (jwt) {
       dispatch({ type: 'SET_ISLOG', payload: true });
-      dispatch({ type: 'SET_USERNAME', payload: username });
+    }
+    if (jwt && user_id) {
+      try {
+        const user = await UserService.getOne(user_id, jwt);
+        if (user.data.Data) {
+          let { username, likedPosts } = user.data.Data;
+          dispatch({ type: 'SET_ISLOG', payload: true });
+          dispatch({ type: 'SET_USERNAME', payload: username });
+          dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+          dispatch({ type: 'SET_ISLOADING', payload: false });
+        }
+      } catch (error) {
+        openSnackBar('error retrieving your data, please login again');
+        dispatch({ type: 'SET_ISLOG', payload: false });
+      }
     } else {
       dispatch({ type: 'SET_ISLOG', payload: false });
     }
+  };
+
+  const setLikedPost = async (likedPosts: string[]) => {
+    dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
   };
 
   return (
@@ -113,6 +140,7 @@ export const UserProvider = ({ children }: props) => {
         changePassword,
         changeUsername,
         userState,
+        setLikedPost,
       }}
     >
       {children}

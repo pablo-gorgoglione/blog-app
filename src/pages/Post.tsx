@@ -11,6 +11,8 @@ import { Spinner } from '../components/Spinner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CommentList } from '../components/Comment/CommentList';
 import { FaHeart } from 'react-icons/fa';
+import { useUser } from '../hooks/useUser';
+import { useSnackBar } from '../hooks/useSnackBar';
 
 interface PostProps {}
 
@@ -28,8 +30,10 @@ const commmentsInitialValues = {} as IComment[];
 export const Post: React.FC<PostProps> = () => {
   let navigate = useNavigate();
   const [post, setPost] = useState<IPost>(postInitialValues);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const { likedPost, isLog, isLoading, setLikedPost, checkIsLog } = useUser();
 
   const params = useParams();
   const idPost = params.idPost;
@@ -37,21 +41,35 @@ export const Post: React.FC<PostProps> = () => {
   let userId = cookies.get('userId');
   let jwt = cookies.get('userInfo');
 
+  const { openSnackBar } = useSnackBar();
+
   useEffect(() => {
-    setLoading(true);
     getPost();
+    getAllComments();
   }, []);
 
   useEffect(() => {
+    if (!isLoading && !loading) {
+      console.log('loading :', loading);
+      console.log('isLog: ', isLog);
+      console.log('likedPost: ', likedPost);
+      console.log('this post id: ', post._id);
+      console.log('isLiked: ', likedPost.includes(post._id));
+      setIsLiked(likedPost.includes(post._id));
+    }
+  }, [isLoading, loading]);
+
+  useEffect(() => {
     changeDateFormat();
-    getAllComments();
+    if (post._id) {
+      setLoading(false);
+    }
   }, [post.content]);
 
   const getPost = async () => {
     const res = await PostService.getOne(idPost, jwt);
     if (res.data.Success === 1) {
       setPost(res.data.Data);
-      setLoading(false);
     }
   };
 
@@ -67,21 +85,48 @@ export const Post: React.FC<PostProps> = () => {
     }
   };
 
-  /* const handleLikeEvent = async () => {
-    const res = await LikeService.sendLikePost(idPost, jwt);
-    if (res) {
-      let newlikecounter: number = res.data.Data.likeCounter;
-      setPost({ ...post, likeCounter: newlikecounter });
+  const handleLikeEvent = async () => {
+    try {
+      const res = await LikeService.sendLikePost(idPost, jwt).catch((err) => {
+        console.log(err.response.data.Message);
+
+        if (err.response.status === 401) {
+          openSnackBar('You must be logged in to like a post');
+        }
+      });
+
+      if (res) {
+        if (res.status === 200) {
+          let newlikecounter: number = res.data.Data.likeCounter;
+          let likedPosts: string[] = res.data.Data.likedPosts;
+          setPost({ ...post, likeCounter: newlikecounter });
+          setLikedPost(likedPosts);
+          setIsLiked(true);
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleDislikeEvent = async () => {
-    const res = await LikeService.deleteLikePost(idPost, jwt);
+    const res = await LikeService.deleteLikePost(idPost, jwt).catch((err) => {
+      console.log(err.response.data.Message);
+    });
+
     if (res) {
-      let newlikecounter: number = res.data.Data.likeCounter;
-      setPost({ ...post, likeCounter: newlikecounter });
+      if (res.status === 200) {
+        let newlikecounter: number = res.data.Data.likeCounter;
+        let likedPosts: string[] = res.data.Data.likedPosts;
+        setPost({ ...post, likeCounter: newlikecounter });
+        setLikedPost(likedPosts);
+        setIsLiked(false);
+      }
     }
-  }; */
+  };
+  const asd = () => {
+    console.log(likedPost.includes(post._id));
+  };
 
   if (loading) {
     return <Spinner />;
@@ -105,7 +150,11 @@ export const Post: React.FC<PostProps> = () => {
               <p>{post.content}</p>
             </div>
             <div className='likecontainer'>
-              <FaHeart className='likeIcon' />
+              {isLiked ? (
+                <FaHeart className='likeIcon' onClick={handleDislikeEvent} />
+              ) : (
+                <FaHeart className='dislikeIcon' onClick={handleLikeEvent} />
+              )}
               {post.likeCounter}
             </div>
           </div>

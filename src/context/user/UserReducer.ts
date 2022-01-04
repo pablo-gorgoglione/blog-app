@@ -5,7 +5,9 @@ type UserAction =
       type: 'SET_ISLOG';
       payload: boolean;
     }
-  | { type: 'SET_USERNAME'; payload: string };
+  | { type: 'SET_USERNAME'; payload: string }
+  | { type: 'SET_ISLOADING'; payload: boolean }
+  | { type: 'SET_LIKEDPOSTS'; payload: string[] };
 
 const userReducer = (state: IUserState, action: UserAction): IUserState => {
   switch (action.type) {
@@ -16,7 +18,10 @@ const userReducer = (state: IUserState, action: UserAction): IUserState => {
       };
     case 'SET_USERNAME':
       return { ...state, username: action.payload };
-
+    case 'SET_LIKEDPOSTS':
+      return { ...state, likedPost: action.payload };
+    case 'SET_ISLOADING':
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

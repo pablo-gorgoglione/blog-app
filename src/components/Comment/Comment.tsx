@@ -1,8 +1,8 @@
+import { useState } from 'react';
 import { IComment } from '../../interfaces/interfaces';
 import { StyledComment } from '../styles/Comment.styled';
 import CommentService from '../../services/comment';
 import { DateFormat } from '../../utils/DateFormatting';
-import { useState } from 'react';
 import LikeService from '../../services/like';
 import { useSnackBar } from '../../hooks/useSnackBar';
 import { FaHeart } from 'react-icons/fa';
@@ -54,9 +54,9 @@ export const Comment: React.FC<CommentProps> = ({
     <StyledComment>
       <div className='container'>
         <div className='usernamediv'>
-          <div className={userId === comment.userId._id ? 'mediv' : ''}>
+          <div className={userId === comment.user._id ? 'mediv' : ''}>
             <FaUser />
-            <b>{comment.userId.username}</b>
+            <b>{comment.user.username}</b>
           </div>
           <span>{DateFormat(comment.date)}</span>
         </div>
@@ -69,7 +69,7 @@ export const Comment: React.FC<CommentProps> = ({
             {likeCounter}
           </div>
           <div className='delete'>
-            {userId === comment.userId._id && (
+            {userId === comment.user._id && (
               //TODO - options component menu on each comment
               <FaTrashAlt onClick={handleDelete} />
             )}

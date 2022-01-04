@@ -10,17 +10,21 @@ export const useUser = () => {
     changePassword,
     changeUsername,
     userState,
+    setLikedPost,
   } = useContext(UserContext);
-  const { isLog, username } = userState;
+  const { isLog, isLoading, username, likedPost } = userState;
 
   return {
     isLog,
+    isLoading,
     username,
+    likedPost,
     changePassword,
     changeUsername,
     login,
     register,
     logout,
     checkIsLog,
+    setLikedPost,
   };
 };

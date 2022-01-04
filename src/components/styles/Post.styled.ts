@@ -30,6 +30,11 @@ export const StyledPost = styled.div`
 
   .likeIcon {
     cursor: pointer;
+    color: red;
+  }
+
+  .dislikeIcon {
+    cursor: pointer;
   }
 
   .CommentButtons {

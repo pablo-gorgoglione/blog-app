@@ -29,11 +29,11 @@ export const About: React.FC<AboutProps> = () => {
             </ul>
 
             <p>
-              For the back-end I'm using Node js without TypeScript and the most
-              important packages to highlight are :
+              For the back-end I'm using Node js and the most important packages
+              to highlight are :
             </p>
             <ul>
-              <li>express</li>
+              <li>express(framawork)</li>
               <li>mongoose</li>
               <li>passport-jwt</li>
             </ul>

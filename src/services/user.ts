@@ -2,12 +2,12 @@ import http from '../http-common';
 import { IUser } from '../interfaces/interfaces';
 import { urlBACKEND } from '../interfaces/interfaces';
 
-const url: string = urlBACKEND;
+const url: string = urlBACKEND + '/user/';
 
 class UserService {
   login(user: IUser) {
     const { password, username } = user;
-    return http.post(url + '/user/login', {
+    return http.post(url + 'login', {
       username,
       password,
     });
@@ -15,7 +15,7 @@ class UserService {
 
   register(user: IUser) {
     const { password, username } = user;
-    return http.post(url + '/user/register', {
+    return http.post(url + 'register', {
       username,
       password,
     });
@@ -23,7 +23,7 @@ class UserService {
 
   changeUsername(newusername: string, jwt: string) {
     return http.put(
-      url + '/user/username',
+      url + 'username',
       {
         newusername,
       },
@@ -35,7 +35,7 @@ class UserService {
 
   changePassword(newpassword: string, jwt: string) {
     return http.put(
-      url + '/user/password',
+      url + 'password',
       {
         newpassword,
       },
@@ -44,5 +44,10 @@ class UserService {
       }
     );
   }
+
+  getOne(idUser: string, jwt: string) {
+    return http.get(url + idUser, { headers: { Authorization: jwt } });
+  }
 }
+
 export default new UserService();

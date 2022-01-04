@@ -32,7 +32,6 @@ export const StyledComment = styled.div`
   .mediv {
     padding: 5px;
     border-radius: 15px;
-    width: 70px;
     background-color: rgb(38, 38, 38);
   }
   .mediv > svg {
