@@ -1,7 +1,8 @@
 //interfaces for contexts and providers
 
-export const urlBACKEND: string = 'http://localhost:4000';
-// 'https://blog-api-pablogorgoglione.herokuapp.com';
+// export const urlBACKEND: string = 'http://localhost:4000';
+export const urlBACKEND: string =
+  'https://blog-api-pablogorgoglione.herokuapp.com';
 
 export interface IPostState {
   posts: IPost[];
