@@ -9,9 +9,9 @@ import { StyledCommentList } from '../styles/CommentList.styled';
 
 interface CommentListProps {
   getAllComments: () => void;
+  comments: IComment[];
   post: IPost;
   jwt: string;
-  comments: IComment[];
   userId: string;
 }
 
@@ -36,12 +36,16 @@ export const CommentList: React.FC<CommentListProps> = ({
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await CommentService.createOne(post._id, jwt, newcomment);
-    if (res.data.Data) {
-      openSnackBar('Comment created!');
-      getAllComments();
-      setNewComment('');
-      setIsOpen(true);
+    if (newcomment.trim().length >= 8) {
+      const res = await CommentService.createOne(post._id, jwt, newcomment);
+      if (res.data.Data) {
+        openSnackBar('Comment created!', false);
+        getAllComments();
+        setNewComment('');
+        setIsOpen(true);
+      }
+    } else {
+      openSnackBar('Comment must be at least 8 characters', true);
     }
   };
   return (

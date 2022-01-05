@@ -1,10 +1,15 @@
 interface ISnackBarState {
+  isError: boolean;
   isOpen: boolean;
   text: string;
 }
 type SnackBarAction =
   | {
       type: 'SET_ISOPEN';
+      payload: boolean;
+    }
+  | {
+      type: 'SET_ISERROR';
       payload: boolean;
     }
   | { type: 'SET_TEXT'; payload: string };
@@ -15,6 +20,11 @@ const snackBarReducer = (state: ISnackBarState, action: SnackBarAction) => {
       return {
         ...state,
         isOpen: action.payload,
+      };
+    case 'SET_ISERROR':
+      return {
+        ...state,
+        isError: action.payload,
       };
     case 'SET_TEXT':
       return {

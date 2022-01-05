@@ -11,8 +11,9 @@ export interface IPostState {
 export interface IUserState {
   username: string;
   isLog: boolean;
-  likedPost: string[];
   isLoading: boolean;
+  likedPosts: string[];
+  likedComments: string[];
 }
 
 //models

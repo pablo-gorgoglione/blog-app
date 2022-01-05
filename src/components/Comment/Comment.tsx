@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IComment } from '../../interfaces/interfaces';
 import { StyledComment } from '../styles/Comment.styled';
 import CommentService from '../../services/comment';
@@ -9,13 +9,14 @@ import { FaHeart } from 'react-icons/fa';
 import { FaTrashAlt } from 'react-icons/fa';
 // import { FaUserCircle } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
+import { useUser } from '../../hooks/useUser';
 
 interface CommentProps {
+  getAllComments: () => void;
   userId: string;
   comment: IComment;
   idPost: string | undefined;
   jwt: string;
-  getAllComments: () => void;
 }
 
 export const Comment: React.FC<CommentProps> = ({
@@ -26,27 +27,69 @@ export const Comment: React.FC<CommentProps> = ({
   userId,
 }) => {
   const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const { likedComments, isLoading, setLikedComments } = useUser();
 
   const { openSnackBar } = useSnackBar();
+
+  useEffect(() => {
+    if (comment._id && !isLoading) {
+      console.log(
+        likedComments.includes(comment._id) + ' tapiola ',
+        comment._id
+      );
+      console.log(likedComments);
+      setIsLiked(likedComments.includes(comment._id));
+    }
+  }, [comment._id]);
 
   const handleDelete = async () => {
     const res = await CommentService.deleteOne(idPost, jwt, comment._id);
     if (res.data.Success === 1) {
       getAllComments();
-      openSnackBar('Comment deleted!');
+      openSnackBar('Comment deleted!', false);
     }
   };
 
   const handleLike = async () => {
-    const data = await LikeService.sendLikeComment(comment._id, idPost, jwt);
-    if (data.data.Data) {
-      setLikeCounter(data.data.Data.likeCounter);
+    setIsLiked(true);
+    setLikeCounter((prevState) => prevState + 1);
+    const data = await LikeService.sendLikeComment(
+      comment._id,
+      idPost,
+      jwt
+    ).catch((err) => {
+      setIsLiked(false);
+      console.log(err.response.data.Message);
+      if (err.response.status === 401) {
+        openSnackBar('You must be logged in to like a comment', true);
+      }
+    });
+    if (data) {
+      if (data.data.Data) {
+        setLikeCounter(data.data.Data.likeCounter);
+        setLikedComments(data.data.Data.likedComments);
+      }
     }
   };
+
   const handleDislike = async () => {
-    const data = await LikeService.deleteLikeComment(comment._id, idPost, jwt);
-    if (data.data.Data) {
-      setLikeCounter(data.data.Data.likeCounter);
+    setLikeCounter((prevState) => prevState - 1);
+    setIsLiked(false);
+    const data = await LikeService.deleteLikeComment(
+      comment._id,
+      idPost,
+      jwt
+    ).catch((err) => {
+      setIsLiked(true);
+      console.log(err.response.data.Message);
+    });
+
+    if (data) {
+      if (data.data.Data) {
+        setLikeCounter(data.data.Data.likeCounter);
+        setLikedComments(data.data.Data.likedComments);
+      }
     }
   };
 
@@ -54,34 +97,35 @@ export const Comment: React.FC<CommentProps> = ({
     <StyledComment>
       <div className='container'>
         <div className='usernamediv'>
-          <div className={userId === comment.user._id ? 'mediv' : ''}>
-            <FaUser />
-            <b>{comment.user.username}</b>
-          </div>
+          {comment.user === null ? (
+            <div>
+              <FaUser /> <b>deleted</b>{' '}
+            </div>
+          ) : (
+            <div className={userId === comment.user._id ? 'mediv' : ''}>
+              <FaUser />
+              <b>{comment.user.username}</b>
+            </div>
+          )}
           <span>{DateFormat(comment.date)}</span>
         </div>
         <div className='content-container'>
           <p> {comment.content}</p>
         </div>
         <div className='btns'>
-          <div>
-            <FaHeart />
-            {likeCounter}
-          </div>
           <div className='delete'>
-            {userId === comment.user._id && (
+            {comment.user !== null && userId === comment.user._id && (
               //TODO - options component menu on each comment
               <FaTrashAlt onClick={handleDelete} />
             )}
           </div>
-          <div>
-            this will be deleted soon...
-            <button className='LikeButton' onClick={handleLike}>
-              +1
-            </button>
-            <button className='DislikeButton' onClick={handleDislike}>
-              -1
-            </button>
+          <div className='likecontainer'>
+            {isLiked ? (
+              <FaHeart className='likeIcon' onClick={handleDislike} />
+            ) : (
+              <FaHeart className='dislikeIcon' onClick={handleLike} />
+            )}
+            {likeCounter}
           </div>
         </div>
       </div>

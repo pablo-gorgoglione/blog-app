@@ -33,7 +33,7 @@ export const Post: React.FC<PostProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { likedPost, isLog, isLoading, setLikedPost, checkIsLog } = useUser();
+  const { likedPosts, isLoading, setLikedPost } = useUser();
 
   const params = useParams();
   const idPost = params.idPost;
@@ -50,15 +50,11 @@ export const Post: React.FC<PostProps> = () => {
 
   useEffect(() => {
     if (!isLoading && !loading) {
-      console.log('loading :', loading);
-      console.log('isLog: ', isLog);
-      console.log('likedPost: ', likedPost);
-      console.log('this post id: ', post._id);
-      console.log('isLiked: ', likedPost.includes(post._id));
-      setIsLiked(likedPost.includes(post._id));
+      setIsLiked(likedPosts.includes(post._id));
     }
   }, [isLoading, loading]);
 
+  /* change the Date format when the post is loaded */
   useEffect(() => {
     changeDateFormat();
     if (post._id) {
@@ -82,35 +78,37 @@ export const Post: React.FC<PostProps> = () => {
     const res = await PostService.getAllComments(idPost, jwt);
     if (res) {
       setComments(res.data.Data);
+      console.log(res.data.Data);
     }
   };
 
   const handleLikeEvent = async () => {
-    try {
-      const res = await LikeService.sendLikePost(idPost, jwt).catch((err) => {
-        console.log(err.response.data.Message);
-
-        if (err.response.status === 401) {
-          openSnackBar('You must be logged in to like a post');
-        }
-      });
-
-      if (res) {
-        if (res.status === 200) {
-          let newlikecounter: number = res.data.Data.likeCounter;
-          let likedPosts: string[] = res.data.Data.likedPosts;
-          setPost({ ...post, likeCounter: newlikecounter });
-          setLikedPost(likedPosts);
-          setIsLiked(true);
-        }
+    setIsLiked(true);
+    setPost({ ...post, likeCounter: post.likeCounter + 1 });
+    const res = await LikeService.sendLikePost(idPost, jwt).catch((err) => {
+      setIsLiked(false);
+      console.log(err.response.data.Message);
+      if (err.response.status === 401) {
+        openSnackBar('You must be logged in to like a post', true);
       }
-    } catch (error) {
-      console.log(error);
+    });
+
+    if (res) {
+      if (res.status === 200) {
+        let newlikecounter: number = res.data.Data.likeCounter;
+        let likedPosts: string[] = res.data.Data.likedPosts;
+        setPost({ ...post, likeCounter: newlikecounter });
+        setLikedPost(likedPosts);
+      }
     }
   };
 
   const handleDislikeEvent = async () => {
+    setIsLiked(false);
+    setPost({ ...post, likeCounter: post.likeCounter - 1 });
+
     const res = await LikeService.deleteLikePost(idPost, jwt).catch((err) => {
+      setIsLiked(true);
       console.log(err.response.data.Message);
     });
 
@@ -120,12 +118,8 @@ export const Post: React.FC<PostProps> = () => {
         let likedPosts: string[] = res.data.Data.likedPosts;
         setPost({ ...post, likeCounter: newlikecounter });
         setLikedPost(likedPosts);
-        setIsLiked(false);
       }
     }
-  };
-  const asd = () => {
-    console.log(likedPost.includes(post._id));
   };
 
   if (loading) {

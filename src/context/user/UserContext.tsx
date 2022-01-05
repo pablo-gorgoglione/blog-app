@@ -14,6 +14,7 @@ interface IUserContext {
   changePassword: (newpassword: string) => void;
   changeUsername: (newusername: string) => void;
   setLikedPost: (likedPosts: string[]) => void;
+  setLikedComments: (likedComments: string[]) => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -28,7 +29,8 @@ export const UserProvider = ({ children }: props) => {
     isLog: false,
     isLoading: true,
     username: '',
-    likedPost: [],
+    likedPosts: [],
+    likedComments: [],
   };
 
   //SnackBar hook
@@ -39,7 +41,8 @@ export const UserProvider = ({ children }: props) => {
   const login = async (user: IUser) => {
     const data = await UserService.login(user);
     if (data.data.Data) {
-      let likedPosts: [string] = data.data.Data.likedPosts;
+      let likedPosts: string[] = data.data.Data.likedPosts;
+      let likedComments: string[] = data.data.Data.likedComments;
       let username: string = data.data.Data.username;
       let jwt: string = data.data.Data.token;
       cookies.set('userId', data.data.Data._id, { path: '/' });
@@ -47,8 +50,10 @@ export const UserProvider = ({ children }: props) => {
       cookies.set('userInfo', jwt, { path: '/' });
       dispatch({ type: 'SET_ISLOG', payload: true });
       dispatch({ type: 'SET_USERNAME', payload: username });
+      dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
       dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
       dispatch({ type: 'SET_ISLOADING', payload: false });
+      openSnackBar('Welcome ' + username, false);
     }
   };
 
@@ -56,7 +61,7 @@ export const UserProvider = ({ children }: props) => {
     await UserService.register(user).catch((err) => {
       if (err.response.status === 400) {
         // status code response
-        openSnackBar('Username already exist');
+        openSnackBar('Username already exist', true);
       }
     });
   };
@@ -64,12 +69,13 @@ export const UserProvider = ({ children }: props) => {
   const logout = () => {
     dispatch({ type: 'SET_ISLOG', payload: false });
     dispatch({ type: 'SET_USERNAME', payload: '' });
-    dispatch({ type: 'SET_LIKEDPOSTS', payload: [''] });
+    dispatch({ type: 'SET_LIKEDPOSTS', payload: [] });
+    dispatch({ type: 'SET_LIKEDCOMMENTS', payload: [] });
 
     cookies.remove('userInfo');
     cookies.remove('username');
     cookies.remove('userId');
-    openSnackBar('Logged out');
+    openSnackBar('Logged out', false);
   };
 
   const changeUsername = async (newusername: string) => {
@@ -77,14 +83,14 @@ export const UserProvider = ({ children }: props) => {
     try {
       const data = await UserService.changeUsername(newusername, jwt).catch(
         (err) => {
-          openSnackBar(err.response.data.Message);
+          openSnackBar(err.response.data.Message, true);
         }
       );
       if (data) {
         if (data.data.Success === 1) {
           cookies.set('username', newusername, { path: '/' });
           const username = newusername;
-          openSnackBar('Username has been changed');
+          openSnackBar('Username has been changed', false);
           dispatch({ type: 'SET_USERNAME', payload: username });
         }
       }
@@ -97,7 +103,7 @@ export const UserProvider = ({ children }: props) => {
     const jwt: string = cookies.get('userInfo');
     const data = await UserService.changePassword(newpassword, jwt);
     if (data.data.Data) {
-      openSnackBar('Password has been changed');
+      openSnackBar('Password has been changed', false);
     }
   };
 
@@ -111,14 +117,15 @@ export const UserProvider = ({ children }: props) => {
       try {
         const user = await UserService.getOne(user_id, jwt);
         if (user.data.Data) {
-          let { username, likedPosts } = user.data.Data;
+          let { username, likedPosts, likedComments } = user.data.Data;
           dispatch({ type: 'SET_ISLOG', payload: true });
           dispatch({ type: 'SET_USERNAME', payload: username });
           dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+          dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
           dispatch({ type: 'SET_ISLOADING', payload: false });
         }
       } catch (error) {
-        openSnackBar('error retrieving your data, please login again');
+        openSnackBar('error retrieving your data, please login again', true);
         dispatch({ type: 'SET_ISLOG', payload: false });
       }
     } else {
@@ -128,6 +135,9 @@ export const UserProvider = ({ children }: props) => {
 
   const setLikedPost = async (likedPosts: string[]) => {
     dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+  };
+  const setLikedComments = async (likedComments: string[]) => {
+    dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
   };
 
   return (
@@ -141,6 +151,7 @@ export const UserProvider = ({ children }: props) => {
         changeUsername,
         userState,
         setLikedPost,
+        setLikedComments,
       }}
     >
       {children}

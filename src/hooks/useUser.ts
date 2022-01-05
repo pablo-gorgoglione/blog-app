@@ -11,14 +11,16 @@ export const useUser = () => {
     changeUsername,
     userState,
     setLikedPost,
+    setLikedComments,
   } = useContext(UserContext);
-  const { isLog, isLoading, username, likedPost } = userState;
+  const { isLog, isLoading, username, likedPosts, likedComments } = userState;
 
   return {
     isLog,
     isLoading,
     username,
-    likedPost,
+    likedPosts,
+    likedComments,
     changePassword,
     changeUsername,
     login,
@@ -26,5 +28,6 @@ export const useUser = () => {
     logout,
     checkIsLog,
     setLikedPost,
+    setLikedComments,
   };
 };

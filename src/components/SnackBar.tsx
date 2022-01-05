@@ -6,7 +6,7 @@ interface SnackBarProps {}
 
 export const SnackBar: React.FC<SnackBarProps> = () => {
   const { snackBarState } = useSnackBar();
-  const { text, isOpen } = snackBarState;
+  const { text, isOpen, isError } = snackBarState;
 
   return (
     <AnimatePresence>
@@ -16,7 +16,7 @@ export const SnackBar: React.FC<SnackBarProps> = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <StyledSnackBar>{text}</StyledSnackBar>
+          <StyledSnackBar isError={isError}>{text}</StyledSnackBar>
         </motion.div>
       )}
     </AnimatePresence>

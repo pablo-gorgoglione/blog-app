@@ -117,5 +117,4 @@ export const StyledChangeUsername = styled.div`
     color: red;
     font-size: 12px;
   }
-  /* asdas */
 `;

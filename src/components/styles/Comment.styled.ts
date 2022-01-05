@@ -65,14 +65,19 @@ export const StyledComment = styled.div`
     color: red;
   }
   .btns > div:last-child {
-    border: 2px solid rgb(70, 70, 70);
   }
 
   .content-container {
     margin-left: 50px;
     font-size: 18px;
   }
-  svg {
+
+  .likeIcon {
+    cursor: pointer;
+    color: red;
+  }
+
+  .dislikeIcon {
     cursor: pointer;
   }
 `;

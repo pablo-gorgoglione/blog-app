@@ -2,13 +2,14 @@ import { createContext, useReducer } from 'react';
 import snackBarReducer from './SnackBarReducer';
 
 interface ISnackBarState {
+  isError: boolean;
   isOpen: boolean;
   text: string;
 }
 
 interface ISnackBarContext {
   snackBarState: ISnackBarState;
-  openSnackBar: (text: string) => void;
+  openSnackBar: (text: string, isError: boolean) => void;
 }
 
 const SnackBarContext = createContext<ISnackBarContext>({} as ISnackBarContext);
@@ -19,19 +20,22 @@ interface props {
 
 export const SnackBarProvider = ({ children }: props) => {
   const initialState: ISnackBarState = {
+    isError: false,
     isOpen: false,
     text: '',
   };
 
   const [snackBarState, dispatch] = useReducer(snackBarReducer, initialState);
 
-  const openSnackBar = (text: string) => {
+  const openSnackBar = (text: string, isError: boolean) => {
     dispatch({ type: 'SET_TEXT', payload: text });
+    dispatch({ type: 'SET_ISERROR', payload: isError });
     dispatch({ type: 'SET_ISOPEN', payload: true });
     setTimeout(() => {
       dispatch({ type: 'SET_ISOPEN', payload: false });
       setTimeout(() => {
         dispatch({ type: 'SET_TEXT', payload: '' });
+        dispatch({ type: 'SET_ISERROR', payload: false });
       }, 2000);
     }, 5000);
   };
