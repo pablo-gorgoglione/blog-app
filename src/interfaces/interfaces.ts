@@ -40,6 +40,7 @@ export interface IPost {
   tags: string[];
   isPublished: number;
   likeCounter: number;
+  commentCounter: number;
 }
 
 export interface IUser {

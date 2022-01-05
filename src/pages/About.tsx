@@ -19,7 +19,7 @@ export const About: React.FC<AboutProps> = () => {
           <div>
             <h2>Some information about the page</h2>
             <p>
-              For the front-end i'm using React with TypeScript and the most
+              For the front-end i'm using React with TypeScript, and the most
               important packages to highlight are :
             </p>
             <ul>
@@ -29,11 +29,11 @@ export const About: React.FC<AboutProps> = () => {
             </ul>
 
             <p>
-              For the back-end I'm using Node js and the most important packages
-              to highlight are :
+              For the back-end I'm using Node js, hosted on heroku, and the most
+              important packages to highlight are :
             </p>
             <ul>
-              <li>express(framawork)</li>
+              <li>express(framework)</li>
               <li>mongoose</li>
               <li>passport-jwt</li>
             </ul>

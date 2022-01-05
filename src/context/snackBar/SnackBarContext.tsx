@@ -28,15 +28,18 @@ export const SnackBarProvider = ({ children }: props) => {
   const [snackBarState, dispatch] = useReducer(snackBarReducer, initialState);
 
   const openSnackBar = (text: string, isError: boolean) => {
+    if (snackBarState.isOpen) {
+      dispatch({ type: 'SET_ISOPEN', payload: false });
+      dispatch({ type: 'SET_TEXT', payload: '' });
+      dispatch({ type: 'SET_ISERROR', payload: false });
+    }
     dispatch({ type: 'SET_TEXT', payload: text });
     dispatch({ type: 'SET_ISERROR', payload: isError });
     dispatch({ type: 'SET_ISOPEN', payload: true });
     setTimeout(() => {
       dispatch({ type: 'SET_ISOPEN', payload: false });
-      setTimeout(() => {
-        dispatch({ type: 'SET_TEXT', payload: '' });
-        dispatch({ type: 'SET_ISERROR', payload: false });
-      }, 2000);
+      dispatch({ type: 'SET_TEXT', payload: '' });
+      dispatch({ type: 'SET_ISERROR', payload: false });
     }, 5000);
   };
 

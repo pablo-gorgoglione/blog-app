@@ -29,13 +29,19 @@ export const PostProvider = ({ children }: props) => {
   const jwt: string = cookies.get('userInfo');
 
   const getAllPost = async () => {
-    const data = await PostService.getAll(jwt);
-    if (data.data.Data) {
-      let posts = data.data.Data;
-      dispatch({
-        type: 'SET_POSTS',
-        payload: posts,
-      });
+    const data = await PostService.getAll(jwt).catch((err) => {
+      console.log(err);
+    });
+
+    if (data) {
+      if (data.data.Data) {
+        console.log(data.data.Data);
+        let posts = data.data.Data;
+        dispatch({
+          type: 'SET_POSTS',
+          payload: posts,
+        });
+      }
     }
   };
 

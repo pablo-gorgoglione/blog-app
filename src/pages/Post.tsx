@@ -24,6 +24,7 @@ const postInitialValues = {
   tags: [],
   isPublished: 0,
   likeCounter: 0,
+  commentCounter: 0,
 } as IPost;
 const commmentsInitialValues = {} as IComment[];
 

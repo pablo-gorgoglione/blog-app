@@ -36,16 +36,25 @@ export const CommentList: React.FC<CommentListProps> = ({
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (newcomment.trim().length >= 8) {
-      const res = await CommentService.createOne(post._id, jwt, newcomment);
-      if (res.data.Data) {
-        openSnackBar('Comment created!', false);
-        getAllComments();
-        setNewComment('');
-        setIsOpen(true);
+    if (newcomment.trim().length >= 5) {
+      const res = await CommentService.createOne(
+        post._id,
+        jwt,
+        newcomment
+      ).catch((err) => {
+        console.log(err.response);
+      });
+      if (res) {
+        if (res.data.Data) {
+          console.log(res);
+          openSnackBar('Comment created!', false);
+          getAllComments();
+          setNewComment('');
+          setIsOpen(true);
+        }
       }
     } else {
-      openSnackBar('Comment must be at least 8 characters', true);
+      openSnackBar('Comment must be at least 5 characters', true);
     }
   };
   return (

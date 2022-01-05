@@ -39,21 +39,26 @@ export const UserProvider = ({ children }: props) => {
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
   const login = async (user: IUser) => {
-    const data = await UserService.login(user);
-    if (data.data.Data) {
-      let likedPosts: string[] = data.data.Data.likedPosts;
-      let likedComments: string[] = data.data.Data.likedComments;
-      let username: string = data.data.Data.username;
-      let jwt: string = data.data.Data.token;
-      cookies.set('userId', data.data.Data._id, { path: '/' });
-      cookies.set('username', username, { path: '/' });
-      cookies.set('userInfo', jwt, { path: '/' });
-      dispatch({ type: 'SET_ISLOG', payload: true });
-      dispatch({ type: 'SET_USERNAME', payload: username });
-      dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
-      dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
-      dispatch({ type: 'SET_ISLOADING', payload: false });
-      openSnackBar('Welcome ' + username, false);
+    const data = await UserService.login(user).catch((err) => {
+      openSnackBar(err.response.data.Message, true);
+    });
+
+    if (data) {
+      if (data.data.Data) {
+        let likedPosts: string[] = data.data.Data.likedPosts;
+        let likedComments: string[] = data.data.Data.likedComments;
+        let username: string = data.data.Data.username;
+        let jwt: string = data.data.Data.token;
+        cookies.set('userId', data.data.Data._id, { path: '/' });
+        cookies.set('username', username, { path: '/' });
+        cookies.set('userInfo', jwt, { path: '/' });
+        dispatch({ type: 'SET_ISLOG', payload: true });
+        dispatch({ type: 'SET_USERNAME', payload: username });
+        dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
+        dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+        dispatch({ type: 'SET_ISLOADING', payload: false });
+        openSnackBar('Welcome ' + username, false);
+      }
     }
   };
 
