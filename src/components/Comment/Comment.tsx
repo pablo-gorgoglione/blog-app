@@ -39,10 +39,8 @@ export const Comment: React.FC<CommentProps> = ({
   }, [comment._id]);
 
   const handleDelete = async () => {
-    console.log('wat');
     const res = await CommentService.deleteOne(idPost, jwt, comment._id);
     if (res.data.Success === 1) {
-      console.log(res);
       getAllComments();
       openSnackBar('Comment deleted!', false);
     }

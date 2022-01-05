@@ -35,7 +35,6 @@ export const PostProvider = ({ children }: props) => {
 
     if (data) {
       if (data.data.Data) {
-        console.log(data.data.Data);
         let posts = data.data.Data;
         dispatch({
           type: 'SET_POSTS',
