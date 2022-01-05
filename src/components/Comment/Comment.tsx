@@ -34,17 +34,13 @@ export const Comment: React.FC<CommentProps> = ({
 
   useEffect(() => {
     if (comment._id && !isLoading) {
-      console.log(
-        likedComments.includes(comment._id) + ' tapiola ',
-        comment._id
-      );
-      console.log(likedComments);
       setIsLiked(likedComments.includes(comment._id));
     }
   }, [comment._id]);
 
   const handleDelete = async () => {
     const res = await CommentService.deleteOne(idPost, jwt, comment._id);
+    console.log(res);
     if (res.data.Success === 1) {
       getAllComments();
       openSnackBar('Comment deleted!', false);

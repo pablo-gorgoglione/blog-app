@@ -2,16 +2,17 @@ import styled from 'styled-components';
 
 export const StyledComment = styled.div`
   /*  */
-  padding: 30px 5px;
+  padding: 20px;
   border-color: white;
   border-width: 2px;
   margin-left: 10;
   border-top: 2px solid rgb(70, 70, 70);
 
   /*  */
+  .likecontainer {
+    margin: 0;
+  }
   .container {
-    margin-left: 20px;
-    margin-right: 20px;
   }
   .usernamediv {
     display: flex;
@@ -48,11 +49,11 @@ export const StyledComment = styled.div`
     height: 20px;
   }
   .btns {
-    margin-left: 20px;
-    margin-right: 20px;
+    height: fit-content;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    column-gap: 20px;
+    justify-content: flex-end;
   }
   .btns > div {
     display: flex;
@@ -68,8 +69,10 @@ export const StyledComment = styled.div`
   }
 
   .content-container {
-    margin-left: 50px;
     font-size: 18px;
+  }
+  .content-container > p {
+    margin-left: 30px;
   }
 
   .likeIcon {
@@ -78,6 +81,9 @@ export const StyledComment = styled.div`
   }
 
   .dislikeIcon {
+    cursor: pointer;
+  }
+  .delete > svg {
     cursor: pointer;
   }
 `;

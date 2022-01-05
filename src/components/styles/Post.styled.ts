@@ -27,6 +27,10 @@ export const StyledPost = styled.div`
     margin-bottom: 20px;
     align-items: center;
   }
+  .postcontainer > div:last-child {
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
 
   .likeIcon {
     cursor: pointer;
