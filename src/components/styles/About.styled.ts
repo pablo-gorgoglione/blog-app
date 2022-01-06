@@ -5,7 +5,6 @@ export const StyledAbout = styled.div`
   border-radius: 8px;
   background-color: rgb(42, 42, 42);
   border: 2px solid rgb(70, 70, 70);
-  min-width: 300px;
   .main-container {
     display: flex;
     flex-direction: column;

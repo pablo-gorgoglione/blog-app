@@ -4,13 +4,11 @@ export const StyledPost = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 30px;
-  min-width: 400px;
 
   .postcontainer {
     padding: 20px;
     border-radius: 8px;
     background-color: rgb(42, 42, 42);
-    min-width: 300px;
     border: 2px solid rgb(70, 70, 70);
   }
 

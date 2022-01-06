@@ -7,8 +7,10 @@ export const StyledNav = styled.nav`
   font-size: 2em;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 0px 100px 0px 80px;
+  width: 100%;
+  column-gap: 40px;
+  justify-content: space-around;
+
   /* END NAV */
 
   a,
@@ -27,5 +29,12 @@ export const StyledNav = styled.nav`
   .user {
     display: flex;
     align-items: center;
+  }
+
+  @media (max-width: 700px) {
+    div,
+    div > a {
+      display: none;
+    }
   }
 `;
