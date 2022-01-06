@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { useSnackBar } from '../../hooks/useSnackBar';
+import { useUser } from '../../hooks/useUser';
 
 interface CommentFormProps {
   newcomment: string;
@@ -12,6 +14,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
   handleCommentSubmit,
   handleCommChange,
 }) => {
+  const { isLog } = useUser();
   return (
     <motion.form
       initial={{ opacity: 0 }}
@@ -25,6 +28,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
         value={newcomment}
         onChange={handleCommChange}
         placeholder='Add a public comment...'
+        disabled={!isLog}
       />
 
       <div>

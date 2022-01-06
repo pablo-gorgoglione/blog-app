@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { CommentForm } from './CommentForm';
 import { useSnackBar } from '../../hooks/useSnackBar';
 import { StyledCommentList } from '../styles/CommentList.styled';
+import { useUser } from '../../hooks/useUser';
 
 interface CommentListProps {
   getAllComments: () => void;
@@ -25,6 +26,7 @@ export const CommentList: React.FC<CommentListProps> = ({
   const [newcomment, setNewComment] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { openSnackBar } = useSnackBar();
+  const { isLog } = useUser();
 
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
@@ -36,26 +38,30 @@ export const CommentList: React.FC<CommentListProps> = ({
 
   const handleCommentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (newcomment.trim().length >= 5) {
-      const res = await CommentService.createOne(
-        post._id,
-        jwt,
-        newcomment
-      ).catch((err) => {
-        console.log(err.response);
-      });
-      if (res) {
-        if (res.data.Data) {
-          console.log(res);
-          openSnackBar('Comment created!', false);
-          getAllComments();
-          setNewComment('');
-          setIsOpen(true);
+    if (isLog) {
+      if (newcomment.trim().length >= 5) {
+        const res = await CommentService.createOne(
+          post._id,
+          jwt,
+          newcomment
+        ).catch((err) => {
+          console.log(err.response);
+        });
+        if (res) {
+          if (res.data.Data) {
+            console.log(res);
+            openSnackBar('Comment created!', false);
+            getAllComments();
+            setNewComment('');
+            setIsOpen(true);
+          }
         }
+      } else {
+        openSnackBar('Comment must be at least 5 characters', true);
       }
-    } else {
-      openSnackBar('Comment must be at least 5 characters', true);
+      return;
     }
+    openSnackBar('Login to comment', true);
   };
   return (
     <StyledCommentList>
