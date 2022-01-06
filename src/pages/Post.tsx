@@ -53,7 +53,7 @@ export const Post: React.FC<PostProps> = () => {
     if (!isLoading && !loading) {
       setIsLiked(likedPosts.includes(post._id));
     }
-  }, [isLoading, loading]);
+  }, [isLoading, loading, isLog]);
 
   /* change the Date format when the post is loaded */
   useEffect(() => {
@@ -77,6 +77,7 @@ export const Post: React.FC<PostProps> = () => {
 
   const getAllComments = async () => {
     const res = await PostService.getAllComments(idPost, jwt);
+    console.log(res);
     if (res) {
       setComments(res.data.Data);
     }

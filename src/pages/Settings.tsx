@@ -2,6 +2,7 @@ import { ChangePassword } from '../components/Settings/ChangePassword';
 import { ChangeUsername } from '../components/Settings/ChangeUsername';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StyledSettings } from '../components/styles/Settings.styled';
+import { DeleteAccount } from '../components/Settings/DeleteAccount';
 
 interface SettingsProps {}
 
@@ -17,6 +18,7 @@ export const Settings: React.FC<SettingsProps> = () => {
         >
           <ChangeUsername />
           <ChangePassword />
+          <DeleteAccount />
         </motion.div>
       </AnimatePresence>
     </StyledSettings>
