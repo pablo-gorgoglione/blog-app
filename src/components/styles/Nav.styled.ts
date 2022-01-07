@@ -30,11 +30,4 @@ export const StyledNav = styled.nav`
     display: flex;
     align-items: center;
   }
-
-  @media (max-width: 700px) {
-    div,
-    div > a {
-      display: none;
-    }
-  }
 `;
