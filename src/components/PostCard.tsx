@@ -43,7 +43,6 @@ export const PostCard: React.FC<Props> = ({ post }) => {
       )}
       {/* <p>{post.content} </p> */}
 
-      <p>Tags: {post.tags.map((t) => t + ' ')} </p>
       <div className='icons'>
         <div>
           <FaCommentAlt />

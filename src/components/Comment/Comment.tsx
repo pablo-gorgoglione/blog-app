@@ -33,7 +33,7 @@ export const Comment: React.FC<CommentProps> = ({
   const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
-    if (comment._id && !isLoading) {
+    if (comment._id && !isLoading && likedComments) {
       setIsLiked(likedComments.includes(comment._id));
     }
   }, [comment._id]);

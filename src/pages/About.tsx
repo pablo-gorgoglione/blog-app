@@ -2,7 +2,6 @@ import React from 'react';
 import { StyledAbout } from '../components/styles/About.styled';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
-import { FaInstagram } from 'react-icons/fa';
 
 interface AboutProps {}
 
@@ -66,13 +65,6 @@ export const About: React.FC<AboutProps> = () => {
                 </a>
               </div>
             </div>
-            <a
-              href='https://www.instagram.com/pablo.gorg/'
-              target='_blank'
-              rel='noreferrer noopener'
-            >
-              <FaInstagram />
-            </a>
           </div>
         </motion.div>
       </StyledAbout>
