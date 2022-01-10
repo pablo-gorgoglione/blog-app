@@ -22,9 +22,6 @@ export const PostCard: React.FC<Props> = ({ post }) => {
 
   useEffect(() => {
     if (!isLoading && post._id) {
-      console.log('a');
-      /*   console.log(likedPosts);
-      console.log(post._id); */
       setIsLiked(likedPosts.includes(post._id));
     }
   }, [isLoading, post._id, likedPosts]);

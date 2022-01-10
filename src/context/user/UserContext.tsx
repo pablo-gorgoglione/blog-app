@@ -15,6 +15,7 @@ interface IUserContext {
   changeUsername: (newusername: string) => void;
   setLikedPost: (likedPosts: string[]) => void;
   setLikedComments: (likedComments: string[]) => void;
+  deleteAccount: () => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -145,16 +146,30 @@ export const UserProvider = ({ children }: props) => {
     dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
   };
 
+  const deleteAccount = async () => {
+    let jwt = cookies.get('userInfo');
+    const data = await UserService.deleteAccount(jwt).catch((err) => {
+      console.log(err);
+    });
+    if (data) {
+      if (data.data.Data) {
+        logout();
+        openSnackBar('Your account has been successfully deleted', false);
+      }
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
+        userState,
         register,
         login,
+        deleteAccount,
         logout,
         checkIsLog,
         changePassword,
         changeUsername,
-        userState,
         setLikedPost,
         setLikedComments,
       }}

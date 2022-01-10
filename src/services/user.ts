@@ -48,6 +48,9 @@ class UserService {
   getOne(idUser: string, jwt: string) {
     return http.get(url + idUser, { headers: { Authorization: jwt } });
   }
+  deleteAccount(jwt: string) {
+    return http.delete(url, { headers: { Authorization: jwt } });
+  }
 }
 
 export default new UserService();

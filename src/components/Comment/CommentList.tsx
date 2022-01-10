@@ -49,7 +49,6 @@ export const CommentList: React.FC<CommentListProps> = ({
         });
         if (res) {
           if (res.data.Data) {
-            console.log(res);
             openSnackBar('Comment created!', false);
             getAllComments();
             setNewComment('');

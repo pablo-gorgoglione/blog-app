@@ -77,7 +77,6 @@ export const Post: React.FC<PostProps> = () => {
 
   const getAllComments = async () => {
     const res = await PostService.getAllComments(idPost, jwt);
-    console.log(res);
     if (res) {
       setComments(res.data.Data);
     }
