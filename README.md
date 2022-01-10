@@ -1,5 +1,5 @@
 # React with TypeScript App
-This is for my blog-api, for now is just the reader user, you can test the live demo here [Blog App](https://blog-app-pablogorgoglione.netlify.app/) .
+Project for my blog-api, for now is just for the reader user, you can try the live demo here [Blog App](https://blog-app-pablogorgoglione.netlify.app/) .
 
 ### Usage
 ```
