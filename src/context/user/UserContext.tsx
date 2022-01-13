@@ -82,6 +82,7 @@ export const UserProvider = ({ children }: props) => {
     dispatch({ type: 'SET_USERNAME', payload: '' });
     dispatch({ type: 'SET_LIKEDPOSTS', payload: [] });
     dispatch({ type: 'SET_LIKEDCOMMENTS', payload: [] });
+    dispatch({ type: 'SET_USER_ID', payload: '' });
 
     cookies.remove('JWT');
     openSnackBar('Logged out', false);
