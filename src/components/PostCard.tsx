@@ -11,20 +11,14 @@ interface Props {
 }
 export const PostCard: React.FC<Props> = ({ post }) => {
   let navigate = useNavigate();
-  const { likedPosts, isLoading, isLog } = useUser();
+  const { likedPosts, isLoading_User } = useUser();
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isLog) {
-      setIsLiked(false);
-    }
-  }, [isLog]);
-
-  useEffect(() => {
-    if (!isLoading && post._id) {
+    if (!isLoading_User && post._id) {
       setIsLiked(likedPosts.includes(post._id));
     }
-  }, [isLoading, post._id, likedPosts]);
+  }, [isLoading_User, post._id, likedPosts]);
 
   const goToPost = () => {
     navigate(`../post/${post._id}`);

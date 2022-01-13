@@ -3,10 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { StyledNav } from './styles/Nav.styled';
 import { useUser } from '../hooks/useUser';
 import { UserMenu } from './UserMenu';
+import { Spinner } from './Spinner';
 
 interface HeaderProps {}
 export const Navbar: React.FC<HeaderProps> = () => {
-  const { checkIsLog, logout, isLog, username } = useUser();
+  const { checkIsLog, logout, isLog, username, isLoading_User } = useUser();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +28,9 @@ export const Navbar: React.FC<HeaderProps> = () => {
 
       <div className='links-container'>
         <Link to='about'>About</Link>
-
-        {isLog ? (
+        {isLoading_User ? (
+          <Spinner />
+        ) : isLog ? (
           <div className='user'>
             <UserMenu username={username} logout={logout} />
           </div>

@@ -26,22 +26,19 @@ export const PostProvider = ({ children }: props) => {
 
   const [postsState, dispatch] = useReducer(postReducer, initialtState); //cuando use el state
 
-  const jwt: string = cookies.get('userInfo');
-
-  const getAllPost = async () => {
-    const data = await PostService.getAll(jwt).catch((err) => {
-      console.log(err);
-    });
-
-    if (data) {
-      if (data.data.Data) {
-        let posts = data.data.Data;
+  const getAllPost = () => {
+    const jwt: string = cookies.get('JWT');
+    PostService.getAll(jwt)
+      .then((res) => {
+        const { Data } = res.data;
         dispatch({
           type: 'SET_POSTS',
-          payload: posts,
+          payload: Data,
         });
-      }
-    }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (

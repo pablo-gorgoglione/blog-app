@@ -28,64 +28,84 @@ export const Comment: React.FC<CommentProps> = ({
 }) => {
   const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { likedComments, isLoading, setLikedComments } = useUser();
+  const { likedComments, isLoading_User, setLikedComments, isLog } = useUser();
 
   const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
-    if (comment._id && !isLoading && likedComments) {
+    if (comment._id && !isLoading_User && likedComments) {
       setIsLiked(likedComments.includes(comment._id));
     }
   }, [comment._id]);
 
-  const handleDelete = async () => {
-    const res = await CommentService.deleteOne(idPost, jwt, comment._id);
-    if (res.data.Success === 1) {
-      getAllComments();
-      openSnackBar('Comment deleted!', false);
-    }
+  const handleDelete = () => {
+    CommentService.deleteOne(idPost, jwt, comment._id)
+      .then((res) => {
+        const { status } = res;
+        if (status === 200) {
+          getAllComments();
+          openSnackBar('Comment deleted!', false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-  const handleLike = async () => {
+  const handleLike = () => {
+    if (!isLog) {
+      openSnackBar('You must be logged in to like a comment', true);
+      return;
+    }
+
     setIsLiked(true);
     setLikeCounter((prevState) => prevState + 1);
-    const data = await LikeService.sendLikeComment(
-      comment._id,
-      idPost,
-      jwt
-    ).catch((err) => {
-      setIsLiked(false);
-      console.log(err.response.data.Message);
-      if (err.response.status === 401) {
-        openSnackBar('You must be logged in to like a comment', true);
-      }
-    });
-    if (data) {
-      if (data.data.Data) {
-        setLikeCounter(data.data.Data.likeCounter);
-        setLikedComments(data.data.Data.likedComments);
-      }
-    }
+    LikeService.sendLikeComment(comment._id, idPost, jwt)
+      .then((res) => {
+        const {
+          status,
+          data: {
+            Data: { likeCounter, likedComments },
+          },
+        } = res;
+        if (status === 200) {
+          setLikeCounter(likeCounter);
+          setLikedComments(likedComments);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        setIsLiked(false);
+        setLikeCounter((prevState) => prevState - 1);
+      });
   };
 
-  const handleDislike = async () => {
+  const handleDislike = () => {
+    if (!isLog) {
+      openSnackBar('You must be logged in to like a comment', true);
+      return;
+    }
     setLikeCounter((prevState) => prevState - 1);
     setIsLiked(false);
-    const data = await LikeService.deleteLikeComment(
-      comment._id,
-      idPost,
-      jwt
-    ).catch((err) => {
-      setIsLiked(true);
-      console.log(err.response.data.Message);
-    });
 
-    if (data) {
-      if (data.data.Data) {
-        setLikeCounter(data.data.Data.likeCounter);
-        setLikedComments(data.data.Data.likedComments);
-      }
-    }
+    LikeService.deleteLikeComment(comment._id, idPost, jwt)
+      .then((res) => {
+        const {
+          status,
+          data: {
+            Data: { likeCounter, likedComments },
+          },
+        } = res;
+        if (status === 200) {
+          setLikeCounter(likeCounter);
+          setLikedComments(likedComments);
+        }
+      })
+      .catch((e) => {
+        console.log(e.response.data.Message);
+        setLikeCounter((prevState) => prevState + 1);
+        setIsLiked(true);
+      });
   };
 
   return (

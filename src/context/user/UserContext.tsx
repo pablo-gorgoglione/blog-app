@@ -27,8 +27,9 @@ interface props {
 export const UserProvider = ({ children }: props) => {
   const cookies = new Cookies();
   const initialState: IUserState = {
+    id: '',
     isLog: false,
-    isLoading: true,
+    isLoading_User: true,
     username: '',
     likedPosts: [],
     likedComments: [],
@@ -39,37 +40,41 @@ export const UserProvider = ({ children }: props) => {
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
 
-  const login = async (user: IUser) => {
-    const data = await UserService.login(user).catch((err) => {
-      openSnackBar(err.response.data.Message, true);
-    });
-
-    if (data) {
-      if (data.data.Data) {
-        let likedPosts: string[] = data.data.Data.likedPosts;
-        let likedComments: string[] = data.data.Data.likedComments;
-        let username: string = data.data.Data.username;
-        let jwt: string = data.data.Data.token;
-        cookies.set('userId', data.data.Data._id, { path: '/' });
-        cookies.set('username', username, { path: '/' });
-        cookies.set('userInfo', jwt, { path: '/' });
-        dispatch({ type: 'SET_ISLOG', payload: true });
-        dispatch({ type: 'SET_USERNAME', payload: username });
-        dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
-        dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
-        dispatch({ type: 'SET_ISLOADING', payload: false });
-        openSnackBar('Welcome ' + username, false);
-      }
-    }
+  const login = (user: IUser) => {
+    UserService.login(user)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const { username, _id, token, likedPosts, likedComments } = data.Data;
+          cookies.set('JWT', token, { path: '/' });
+          dispatch({ type: 'SET_USER_ID', payload: _id });
+          dispatch({ type: 'SET_ISLOG', payload: true });
+          dispatch({ type: 'SET_USERNAME', payload: username });
+          dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
+          dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+          dispatch({ type: 'SET_ISLOADING', payload: false });
+          openSnackBar('Welcome ' + username, false);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          openSnackBar(e.response.Message, true);
+        }
+      });
   };
 
-  const register = async (user: IUser) => {
-    await UserService.register(user).catch((err) => {
-      if (err.response.status === 400) {
-        // status code response
-        openSnackBar('Username already exist', true);
-      }
-    });
+  const register = (user: IUser) => {
+    UserService.register(user)
+      .then((res) => {
+        if (res.status === 200) {
+          openSnackBar('Successfully registered', false);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          openSnackBar(e.response.Message, true);
+        }
+      });
   };
 
   const logout = () => {
@@ -78,85 +83,86 @@ export const UserProvider = ({ children }: props) => {
     dispatch({ type: 'SET_LIKEDPOSTS', payload: [] });
     dispatch({ type: 'SET_LIKEDCOMMENTS', payload: [] });
 
-    cookies.remove('userInfo');
-    cookies.remove('username');
-    cookies.remove('userId');
+    cookies.remove('JWT');
     openSnackBar('Logged out', false);
   };
 
-  const changeUsername = async (newusername: string) => {
-    const jwt: string = cookies.get('userInfo');
-    try {
-      const data = await UserService.changeUsername(newusername, jwt).catch(
-        (err) => {
-          openSnackBar(err.response.data.Message, true);
-        }
-      );
-      if (data) {
-        if (data.data.Success === 1) {
-          cookies.set('username', newusername, { path: '/' });
-          const username = newusername;
+  const changeUsername = (newusername: string) => {
+    const jwt = cookies.get('JWT');
+    UserService.changeUsername(newusername, jwt)
+      .then((res) => {
+        const { status } = res;
+        if (status === 200) {
           openSnackBar('Username has been changed', false);
-          dispatch({ type: 'SET_USERNAME', payload: username });
+          dispatch({ type: 'SET_USERNAME', payload: newusername });
         }
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .catch((e) => {
+        openSnackBar(e.response.data.Message, true);
+      });
   };
 
-  const changePassword = async (newpassword: string) => {
-    const jwt: string = cookies.get('userInfo');
-    const data = await UserService.changePassword(newpassword, jwt);
-    if (data.data.Data) {
-      openSnackBar('Password has been changed', false);
-    }
+  const changePassword = (newpassword: string) => {
+    const jwt = cookies.get('JWT');
+    UserService.changePassword(newpassword, jwt)
+      .then((res) => {
+        const { status } = res;
+        if (status === 200) {
+          openSnackBar('Password has been changed', false);
+        }
+      })
+      .catch((e) => {
+        openSnackBar('Error, try again', true);
+      });
   };
 
-  const checkIsLog = async () => {
-    let jwt = cookies.get('userInfo');
-    let user_id = cookies.get('userId');
-    if (jwt) {
-      dispatch({ type: 'SET_ISLOG', payload: true });
+  const checkIsLog = () => {
+    let jwt = cookies.get('JWT');
+
+    if (!jwt) {
+      dispatch({ type: 'SET_ISLOG', payload: false });
+      return;
     }
-    if (jwt && user_id) {
-      try {
-        const user = await UserService.getOne(user_id, jwt);
-        if (user.data.Data) {
-          let { username, likedPosts, likedComments } = user.data.Data;
+
+    UserService.getOne(jwt)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const { username, likedPosts, likedComments, _id } = data.Data;
+          dispatch({ type: 'SET_USER_ID', payload: _id });
           dispatch({ type: 'SET_ISLOG', payload: true });
           dispatch({ type: 'SET_USERNAME', payload: username });
           dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
           dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
           dispatch({ type: 'SET_ISLOADING', payload: false });
         }
-      } catch (error) {
-        openSnackBar('error retrieving your data, please login again', true);
+      })
+      .catch((e) => {
         dispatch({ type: 'SET_ISLOG', payload: false });
-      }
-    } else {
-      dispatch({ type: 'SET_ISLOG', payload: false });
-    }
+        openSnackBar('error retrieving your data, please login again', true);
+      });
   };
 
-  const setLikedPost = async (likedPosts: string[]) => {
+  const setLikedPost = (likedPosts: string[]) => {
     dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
   };
-  const setLikedComments = async (likedComments: string[]) => {
+  const setLikedComments = (likedComments: string[]) => {
     dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
   };
 
-  const deleteAccount = async () => {
-    let jwt = cookies.get('userInfo');
-    const data = await UserService.deleteAccount(jwt).catch((err) => {
-      console.log(err);
-    });
-    if (data) {
-      if (data.data.Data) {
-        logout();
-        openSnackBar('Your account has been successfully deleted', false);
-      }
-    }
+  const deleteAccount = () => {
+    let jwt = cookies.get('JWT');
+    UserService.deleteAccount(jwt)
+      .then((res) => {
+        const { status } = res;
+        if (status === 200) {
+          logout();
+          openSnackBar('Your account has been successfully deleted', false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (

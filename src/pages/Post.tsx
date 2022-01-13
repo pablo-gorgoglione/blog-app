@@ -34,99 +34,116 @@ export const Post: React.FC<PostProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { likedPosts, isLoading, setLikedPost, isLog } = useUser();
+  const { likedPosts, isLoading_User, setLikedPost, isLog, id } = useUser();
 
   const params = useParams();
   const idPost = params.idPost;
   const cookies = new Cookies();
-  let userId = cookies.get('userId');
-  let jwt = cookies.get('userInfo');
+  let jwt = cookies.get('JWT');
 
   const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
+    const getPost = () => {
+      PostService.getOne(idPost, jwt)
+        .then((res) => {
+          const { status, data } = res;
+          if (status === 200) {
+            const { Data: Post } = data;
+            setPost(Post);
+          }
+        })
+        .catch((e) => {
+          openSnackBar('Error getting the post', true);
+        });
+    };
+
     getPost();
     getAllComments();
   }, []);
 
   useEffect(() => {
-    if (!isLoading && !loading) {
+    if (!isLoading_User && !loading) {
       setIsLiked(likedPosts.includes(post._id));
     }
-  }, [isLoading, loading, isLog]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading_User, loading, isLog]);
 
-  /* change the Date format when the post is loaded */
   useEffect(() => {
-    changeDateFormat();
+    /* change the Date format when the post is loaded */
+    let date: string = DateFormat(post.datePublished);
+    setPost({ ...post, datePublished: date });
+
     if (post._id) {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.content]);
 
-  const getPost = async () => {
-    const res = await PostService.getOne(idPost, jwt);
-    if (res.data.Success === 1) {
-      setPost(res.data.Data);
+  const getAllComments = () => {
+    PostService.getAllComments(idPost, jwt)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const { Data: Comments } = data;
+          setComments(Comments);
+        }
+      })
+      .catch((e) => {
+        openSnackBar('Error getting comments', true);
+      });
+  };
+
+  const handleLikeEvent = () => {
+    if (!isLog) {
+      openSnackBar('Login to like a post', true);
+      return;
     }
-  };
-
-  const changeDateFormat = () => {
-    let date: string = DateFormat(post.datePublished);
-    setPost({ ...post, datePublished: date });
-  };
-
-  const getAllComments = async () => {
-    const res = await PostService.getAllComments(idPost, jwt);
-    if (res) {
-      setComments(res.data.Data);
-    }
-  };
-
-  const handleLikeEvent = async () => {
-    if (isLog) {
-      setIsLiked(true);
-      setPost({ ...post, likeCounter: post.likeCounter + 1 });
-      const res = await LikeService.sendLikePost(idPost, jwt).catch((err) => {
+    setIsLiked(true);
+    setPost({ ...post, likeCounter: post.likeCounter + 1 });
+    LikeService.sendLikePost(idPost, jwt)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const {
+            Data: { likeCounter: newLikeCounter, likedPosts },
+          } = data;
+          setPost({ ...post, likeCounter: newLikeCounter });
+          setLikedPost(likedPosts);
+        }
+      })
+      .catch((e) => {
         setIsLiked(false);
         setPost({ ...post, likeCounter: post.likeCounter - 1 });
-        console.log(err.response.data.Message);
+        console.log(e);
       });
-
-      if (res) {
-        if (res.status === 200) {
-          let newlikecounter: number = res.data.Data.likeCounter;
-          let likedPosts: string[] = res.data.Data.likedPosts;
-          setPost({ ...post, likeCounter: newlikecounter });
-          setLikedPost(likedPosts);
-        }
-      }
-      return;
-    }
-    openSnackBar('Login to like a post', true);
   };
 
-  const handleDislikeEvent = async () => {
-    if (isLog) {
-      setIsLiked(false);
-      setPost({ ...post, likeCounter: post.likeCounter - 1 });
-
-      const res = await LikeService.deleteLikePost(idPost, jwt).catch((err) => {
-        setIsLiked(true);
-        setPost({ ...post, likeCounter: post.likeCounter + 1 });
-        console.log(err.response.data.Message);
-      });
-
-      if (res) {
-        if (res.status === 200) {
-          let newlikecounter: number = res.data.Data.likeCounter;
-          let likedPosts: string[] = res.data.Data.likedPosts;
-          setPost({ ...post, likeCounter: newlikecounter });
-          setLikedPost(likedPosts);
-        }
-      }
+  const handleDislikeEvent = () => {
+    if (!isLog) {
+      openSnackBar('Login to like a post', true);
       return;
     }
-    openSnackBar('Login to like a post', true);
+
+    setIsLiked(false);
+    setPost({ ...post, likeCounter: post.likeCounter - 1 });
+
+    LikeService.deleteLikePost(idPost, jwt)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const {
+            Data: { likeCounter: newLikeCounter, likedPosts },
+          } = data;
+          setPost({ ...post, likeCounter: newLikeCounter });
+          setLikedPost(likedPosts);
+        }
+      })
+      .catch((e) => {
+        setIsLiked(true);
+        setPost({ ...post, likeCounter: post.likeCounter + 1 });
+        console.log(e);
+      });
   };
 
   if (loading) {
@@ -165,7 +182,7 @@ export const Post: React.FC<PostProps> = () => {
               post={post}
               jwt={jwt}
               comments={comments}
-              userId={userId}
+              userId={id}
             ></CommentList>
           </div>
         </StyledPost>

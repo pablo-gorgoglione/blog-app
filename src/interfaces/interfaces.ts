@@ -1,8 +1,6 @@
 //interfaces for contexts and providers
 
-// export const urlBACKEND: string = 'http://localhost:4000';
-export const urlBACKEND: string =
-  'https://blog-api-pablogorgoglione.herokuapp.com';
+export const urlBACKEND: string = process.env.REACT_APP_BACKEND_URL as string;
 
 export interface IPostState {
   posts: IPost[];
@@ -10,8 +8,9 @@ export interface IPostState {
 
 export interface IUserState {
   username: string;
+  id: string;
   isLog: boolean;
-  isLoading: boolean;
+  isLoading_User: boolean;
   likedPosts: string[];
   likedComments: string[];
 }
