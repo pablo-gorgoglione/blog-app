@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { useSnackBar } from '../../hooks/useSnackBar';
 import { useUser } from '../../hooks/useUser';
 
 interface CommentFormProps {

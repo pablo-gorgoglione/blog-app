@@ -35,6 +35,32 @@ export const UserProvider = ({ children }: props) => {
     likedComments: [],
   };
 
+  const checkIsLog = () => {
+    let jwt = cookies.get('JWT');
+    if (!jwt) {
+      dispatch({ type: 'SET_ISLOADING', payload: false });
+      dispatch({ type: 'SET_ISLOG', payload: false });
+      return;
+    }
+    UserService.getOne(jwt)
+      .then((res) => {
+        const { status, data } = res;
+        if (status === 200) {
+          const { username, likedPosts, likedComments, _id } = data.Data;
+          dispatch({ type: 'SET_USER_ID', payload: _id });
+          dispatch({ type: 'SET_ISLOG', payload: true });
+          dispatch({ type: 'SET_USERNAME', payload: username });
+          dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+          dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
+          dispatch({ type: 'SET_ISLOADING', payload: false });
+        }
+      })
+      .catch((e) => {
+        dispatch({ type: 'SET_ISLOG', payload: false });
+        dispatch({ type: 'SET_ISLOADING', payload: false });
+        openSnackBar('error retrieving your data, please login again', true);
+      });
+  };
   //SnackBar hook
   const { openSnackBar } = useSnackBar();
 
@@ -114,33 +140,6 @@ export const UserProvider = ({ children }: props) => {
       })
       .catch((e) => {
         openSnackBar('Error, try again', true);
-      });
-  };
-
-  const checkIsLog = () => {
-    let jwt = cookies.get('JWT');
-
-    if (!jwt) {
-      dispatch({ type: 'SET_ISLOG', payload: false });
-      return;
-    }
-
-    UserService.getOne(jwt)
-      .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          const { username, likedPosts, likedComments, _id } = data.Data;
-          dispatch({ type: 'SET_USER_ID', payload: _id });
-          dispatch({ type: 'SET_ISLOG', payload: true });
-          dispatch({ type: 'SET_USERNAME', payload: username });
-          dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
-          dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
-          dispatch({ type: 'SET_ISLOADING', payload: false });
-        }
-      })
-      .catch((e) => {
-        dispatch({ type: 'SET_ISLOG', payload: false });
-        openSnackBar('error retrieving your data, please login again', true);
       });
   };
 
