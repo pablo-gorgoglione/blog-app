@@ -20,9 +20,10 @@ export const Home: React.FC<Props> = () => {
   }, [flag]);
 
   //Get current posts
+  var currentPosts: IPost[] = [];
   const indexOfLastPost = currentPage * postPerPAge;
   const indexOfFirstPost = indexOfLastPost - postPerPAge;
-  const currentPosts: IPost[] = posts.slice(indexOfFirstPost, indexOfLastPost);
+  currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   //Change page
   const paginate = (number: number) => {
     setCurrentPage(number);
