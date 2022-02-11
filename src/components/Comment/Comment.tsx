@@ -57,7 +57,7 @@ export const Comment: React.FC<CommentProps> = ({
       openSnackBar('You must be logged in to like a comment', true);
       return;
     }
-
+    const tempLikeCounter = likeCounter;
     setIsLiked(true);
     setLikeCounter((prevState) => prevState + 1);
     LikeService.sendLikeComment(comment._id, idPost, jwt)
@@ -76,7 +76,7 @@ export const Comment: React.FC<CommentProps> = ({
       .catch((e) => {
         console.log(e);
         setIsLiked(false);
-        setLikeCounter((prevState) => prevState - 1);
+        setLikeCounter(tempLikeCounter);
       });
   };
 
@@ -85,6 +85,7 @@ export const Comment: React.FC<CommentProps> = ({
       openSnackBar('You must be logged in to like a comment', true);
       return;
     }
+    const tempLikeCounter = likeCounter;
     setLikeCounter((prevState) => prevState - 1);
     setIsLiked(false);
 
@@ -103,7 +104,7 @@ export const Comment: React.FC<CommentProps> = ({
       })
       .catch((e) => {
         console.log(e.response.data.Message);
-        setLikeCounter((prevState) => prevState + 1);
+        setLikeCounter(tempLikeCounter);
         setIsLiked(true);
       });
   };

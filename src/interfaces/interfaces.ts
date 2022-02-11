@@ -1,9 +1,13 @@
 //interfaces for contexts and providers
 
-export const urlBACKEND: string = process.env.REACT_APP_BACKEND_URL as string;
+export const urlBACKEND: string = process.env
+  .REACT_APP_API_DEVELOPMENT as string;
+// export const urlBACKEND: string = process.env.REACT_APP_API_PRODUCTION as string;
 
 export interface IPostState {
   posts: IPost[];
+  loading: boolean;
+  error: string;
 }
 
 export interface IUserState {

@@ -89,12 +89,13 @@ export const Post: React.FC<PostProps> = () => {
           setComments(Comments);
         }
       })
-      .catch((e) => {
+      .catch(() => {
         openSnackBar('Error getting comments', true);
       });
   };
 
   const handleLikeEvent = () => {
+    const tempLikeCounter = post.likeCounter;
     if (!isLog) {
       openSnackBar('Login to like a post', true);
       return;
@@ -114,8 +115,8 @@ export const Post: React.FC<PostProps> = () => {
       })
       .catch((e) => {
         setIsLiked(false);
-        setPost({ ...post, likeCounter: post.likeCounter - 1 });
-        console.log(e);
+        setPost({ ...post, likeCounter: tempLikeCounter });
+        console.log({ ...e });
       });
   };
 
@@ -124,6 +125,8 @@ export const Post: React.FC<PostProps> = () => {
       openSnackBar('Login to like a post', true);
       return;
     }
+
+    const tempLikeCounter = post.likeCounter;
 
     setIsLiked(false);
     setPost({ ...post, likeCounter: post.likeCounter - 1 });
@@ -141,7 +144,7 @@ export const Post: React.FC<PostProps> = () => {
       })
       .catch((e) => {
         setIsLiked(true);
-        setPost({ ...post, likeCounter: post.likeCounter + 1 });
+        setPost({ ...post, likeCounter: tempLikeCounter });
         console.log(e);
       });
   };

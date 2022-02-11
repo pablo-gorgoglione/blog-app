@@ -84,7 +84,7 @@ export const UserProvider = ({ children }: props) => {
       })
       .catch((e) => {
         if (e.response.status === 400) {
-          openSnackBar(e.response.Message, true);
+          openSnackBar(e.response.data.Message, true);
         }
       });
   };

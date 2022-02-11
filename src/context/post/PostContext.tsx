@@ -1,15 +1,17 @@
 import { createContext, useReducer } from 'react';
-import { IPostState } from '../../interfaces/interfaces';
+import { IPost, IPostState } from '../../interfaces/interfaces';
+import postReducer from './PostReducer';
 import PostService from '../../services/post';
 import Cookies from 'universal-cookie';
-import postReducer from './PostReducer';
-
 /*    *****************************  CONTEXT    *****************************     */
 interface IPostContext {
-  postsState: IPostState;
-  getAllPost: () => void;
+  posts: IPost[];
+  loading: boolean;
+  error: string;
+  getPosts: () => void;
 }
-const PostContext = createContext<IPostContext>({} as IPostContext); // {} as IPostContext, cuando lo consumas va a ser todo de ese tipo.
+
+const PostContext = createContext<IPostContext>({} as IPostContext); //
 
 /*    *****************************  PROVIDER    *****************************     */
 //Provider things
@@ -17,35 +19,41 @@ interface props {
   children: JSX.Element | JSX.Element[];
 }
 
+const initialtState: IPostState = {
+  posts: [],
+  loading: false,
+  error: '',
+};
+
 export const PostProvider = ({ children }: props) => {
   const cookies = new Cookies();
-  //const [posts, setPosts] = useState<IPost[]>([]);
-  const initialtState: IPostState = {
-    posts: [],
-  };
+  const [postsState, dispatch] = useReducer(postReducer, initialtState);
 
-  const [postsState, dispatch] = useReducer(postReducer, initialtState); //cuando use el state
-
-  const getAllPost = () => {
+  const getPosts = async () => {
+    dispatch({ type: 'SET_LOADING' });
     const jwt: string = cookies.get('JWT');
-    PostService.getAll(jwt)
-      .then((res) => {
-        const { Data } = res.data;
-        dispatch({
-          type: 'SET_POSTS',
-          payload: Data,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      const {
+        data: { Data },
+      } = await PostService.getAll(jwt);
+      dispatch({ type: 'SET_POSTS', payload: Data });
+      setTimeout(() => {
+        if (!Data) {
+          console.log(postsState.posts);
+          console.log('pasa por aca el timeout');
+          dispatch({ type: 'SET_ERROR', payload: 'Error getting the posts' });
+        }
+      }, 10000);
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: 'Error getting the posts' });
+    }
   };
 
   return (
     <PostContext.Provider
       value={{
-        postsState,
-        getAllPost,
+        ...postsState,
+        getPosts,
       }}
     >
       {children}

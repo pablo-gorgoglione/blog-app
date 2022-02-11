@@ -22,7 +22,9 @@ export const About: React.FC<AboutProps> = () => {
               important packages to highlight are :
             </p>
             <ul>
-              <li>styled-components</li>
+              <li>
+                styled-components <b>with vanilla CSS</b>
+              </li>
               <li>react-router-dom</li>
               <li>axios</li>
             </ul>

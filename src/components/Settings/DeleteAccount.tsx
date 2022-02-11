@@ -26,7 +26,7 @@ export const DeleteAccount: React.FC<Props> = () => {
         <div>
           {isOpen ? (
             <button className='buttoncancel' onClick={toggleIsOpen}>
-              go back
+              CANCEL
             </button>
           ) : (
             <button className='buttonchange' onClick={toggleIsOpen}>
