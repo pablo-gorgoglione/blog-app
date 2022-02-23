@@ -79,7 +79,7 @@ export const StyledUserMenu = styled.nav`
     margin: 0;
     color: white;
   }
-  .dropdown-menu > div p:first-child {
+  .dropdown-menu > div > p:first-child {
     font-size: 15px;
 
     margin-bottom: 10px;
@@ -110,5 +110,19 @@ export const StyledUserMenu = styled.nav`
     height: 0;
     border-top: 1px solid #30363d;
     width: 100%;
+  }
+
+  .dropdown-author {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dropdown-author > div:nth-child(2) > p {
+    font-size: 15px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+    color: rgb(163, 163, 163);
   }
 `;

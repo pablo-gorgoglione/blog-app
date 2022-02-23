@@ -17,26 +17,21 @@ export const About: React.FC<AboutProps> = () => {
         >
           <div>
             <h2>Some information about the page</h2>
-            <p>
-              For the front-end i'm using React with TypeScript, and the most
-              important packages to highlight are :
-            </p>
+            <p>For the front-end i'm using React with TypeScript and :</p>
             <ul>
-              <li>
-                styled-components <b>with vanilla CSS</b>
-              </li>
+              <li>To manage global state, useContext with useReducer</li>
+              <li>styled-components, with vanilla CSS</li>
               <li>react-router-dom</li>
               <li>axios</li>
+              <li>custom hooks</li>
             </ul>
 
-            <p>
-              For the back-end I'm using Node js, hosted on heroku, and the most
-              important packages to highlight are :
-            </p>
+            <p>For the back-end I'm using Node js, hosted on heroku, using:</p>
             <ul>
-              <li>express(framework)</li>
+              <li>Express</li>
               <li>mongoose</li>
               <li>passport-jwt</li>
+              <li>jest and superTest for endpoint testing</li>
             </ul>
           </div>
           <div className='link-container'>

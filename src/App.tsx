@@ -14,6 +14,9 @@ import { PostProvider } from './context/post/PostContext';
 import { UserProvider } from './context/user/UserContext';
 import { SnackBar } from './components/SnackBar';
 import { SnackBarProvider } from './context/snackBar/SnackBarContext';
+import CreatePost from './pages/CreatePost';
+import AuthorPostList from './pages/AuthorPostList';
+import EditPost from './pages/EditPost';
 
 const theme = {
   colors: {
@@ -41,6 +44,15 @@ const App: React.FC = () => {
                     <Route path='/settings' element={<Settings />} />
                     <Route path='/register' element={<Register />} />
                     <Route path='/post/:idPost' element={<Post />} />
+                    <Route
+                      path='/author/post/create'
+                      element={<CreatePost />}
+                    />
+                    <Route path='/author/post/' element={<AuthorPostList />} />
+                    <Route
+                      path='/author/post/edit/:id'
+                      element={<EditPost />}
+                    />
                     <Route path='*' element={<NotFound />} />
                   </Routes>
 

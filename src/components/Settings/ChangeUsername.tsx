@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSettings } from '../../hooks/useSettings';
-import { StyledChangeUsername } from '../styles/ChangeUsername.styled';
 
 interface ChangeUsernameProps {}
 
@@ -23,45 +22,43 @@ export const ChangeUsername: React.FC<ChangeUsernameProps> = () => {
   };
 
   return (
-    <StyledChangeUsername>
+    <div>
       <div className='tittle'>
         <h2>Username</h2>
-        <div>
-          {isOpen ? (
-            <button className='btnCancel' onClick={toggleIsOpen}>
-              Cancel
-            </button>
-          ) : (
-            <button className='btnChange' onClick={toggleIsOpen}>
-              Change
-            </button>
-          )}
-        </div>
+
+        {isOpen ? (
+          <button className='buttoncancel' onClick={toggleIsOpen}>
+            Cancel
+          </button>
+        ) : (
+          <button className='buttonchange' onClick={toggleIsOpen}>
+            Change
+          </button>
+        )}
       </div>
 
       {isOpen && (
-        <div className='container'>
-          <form
-            onSubmit={(e) => {
-              handleUsernameSubmit(e);
-            }}
-          >
-            <div>
-              <input
-                onChange={handleChangeUsername}
-                type='text'
-                placeholder='New username'
-                name='username'
-                value={username}
-              />
-              <span>{usernameError}</span>
-            </div>
-            <div className='btnSubmit'>
-              <button type='submit'>Submit</button>
-            </div>
-          </form>
-        </div>
+        <form
+          className='container-changeUsername'
+          onSubmit={(e) => {
+            handleUsernameSubmit(e);
+          }}
+        >
+          <div>
+            <input
+              onChange={handleChangeUsername}
+              type='text'
+              placeholder='New username'
+              name='username'
+              value={username}
+            />
+            <span>{usernameError}</span>
+          </div>
+          <button className='buttonSubmit' type='submit'>
+            Submit
+          </button>
+        </form>
       )}
-    </StyledChangeUsername>
+    </div>
   );
 };

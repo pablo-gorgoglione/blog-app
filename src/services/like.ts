@@ -6,7 +6,7 @@ const url: string = urlBACKEND;
 class LikeServices {
   sendLikePost(idPost: string | undefined, jwt: string) {
     return http.post(
-      url + `/post/${idPost}/like`,
+      url + `/user/post/${idPost}/like`,
       {},
       {
         headers: { Authorization: jwt },
@@ -15,7 +15,7 @@ class LikeServices {
   }
 
   deleteLikePost(idPost: string | undefined, jwt: string) {
-    return http.delete(url + `/post/${idPost}/like`, {
+    return http.delete(url + `/user/post/${idPost}/like`, {
       headers: { Authorization: jwt },
     });
   }
@@ -26,7 +26,7 @@ class LikeServices {
     jwt: string
   ) {
     return http.post(
-      url + `/post/${idPost}/comment/${idComment}/like`,
+      url + `/user/post/${idPost}/comment/${idComment}/like`,
       {},
       {
         headers: { Authorization: jwt },
@@ -39,7 +39,7 @@ class LikeServices {
     idPost: string | undefined,
     jwt: string
   ) {
-    return http.delete(url + `/post/${idPost}/comment/${idComment}/like`, {
+    return http.delete(url + `/user/post/${idPost}/comment/${idComment}/like`, {
       headers: { Authorization: jwt },
     });
   }

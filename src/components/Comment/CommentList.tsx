@@ -32,30 +32,27 @@ export const CommentList: React.FC<CommentListProps> = ({
     setIsOpen(!isOpen);
   };
 
-  const handleCommChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommChange = (e: any) => {
     setNewComment(e.target.value);
   };
 
-  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleCommentSubmit = () => {
     if (!isLog) {
       openSnackBar('Login to comment', true);
       return;
     }
+    console.log('asdasd???ASD?AS??');
     if (newcomment.trim().length <= 4) {
       openSnackBar('Comment must be at least 5 characters', true);
       return;
     }
 
     CommentService.createOne(post._id, jwt, newcomment)
-      .then((res) => {
-        const { status } = res;
-        if (status === 200) {
-          openSnackBar('Comment created!', false);
-          getAllComments();
-          setNewComment('');
-          setIsOpen(true);
-        }
+      .then(() => {
+        openSnackBar('Comment created!', false);
+        getAllComments();
+        setNewComment('');
+        setIsOpen(true);
       })
       .catch((e) => {
         console.log(e);

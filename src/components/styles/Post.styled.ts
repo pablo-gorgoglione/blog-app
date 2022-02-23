@@ -58,5 +58,9 @@ export const StyledPost = styled.div`
   }
   .Content > p:last-child {
     font-size: 20px;
+    text-align: justify;
+  }
+  .Content {
+    margin: 20px;
   }
 `;

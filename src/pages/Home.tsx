@@ -12,18 +12,25 @@ export const Home: React.FC<Props> = () => {
   const { loading, posts, error, getPosts } = useContext(PostContext);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [flag, setFlag] = useState(false);
+  const [tempPosts, setTempPosts] = useState<IPost[]>(posts);
   const [postPerPAge] = useState(5);
 
   useEffect(() => {
     getPosts();
-  }, [flag]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (posts && !loading) {
+      setTempPosts(posts);
+    }
+  }, [loading, posts]);
 
   //Get current posts
   var currentPosts: IPost[] = [];
   const indexOfLastPost = currentPage * postPerPAge;
   const indexOfFirstPost = indexOfLastPost - postPerPAge;
-  currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  currentPosts = tempPosts.slice(indexOfFirstPost, indexOfLastPost);
   //Change page
   const paginate = (number: number) => {
     setCurrentPage(number);
@@ -36,14 +43,6 @@ export const Home: React.FC<Props> = () => {
     return (
       <>
         <h2>{error}</h2>
-        <h2
-          onClick={() => {
-            setFlag(!flag);
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          Try Again
-        </h2>
       </>
     );
   }
@@ -54,12 +53,14 @@ export const Home: React.FC<Props> = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ width: '100%' }}
       >
         <PostList posts={currentPosts} />
         <Pagination
           postsPerPage={postPerPAge}
           totalPosts={posts.length}
           paginate={paginate}
+          currentPage={currentPage}
         />
       </motion.div>
     </AnimatePresence>

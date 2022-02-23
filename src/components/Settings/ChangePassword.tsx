@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSettings } from '../../hooks/useSettings';
-import { StyledChangePassword } from '../styles/ChangePasssword.styled';
 
 interface ChangePasswordProps {}
 
@@ -22,20 +21,18 @@ export const ChangePassword: React.FC<ChangePasswordProps> = () => {
   };
 
   return (
-    <StyledChangePassword>
+    <div>
       <div className='tittle'>
         <h2>Password</h2>
-        <div>
-          {isOpen ? (
-            <button className='buttoncancel' onClick={toggleIsOpen}>
-              Cancel
-            </button>
-          ) : (
-            <button className='buttonchange' onClick={toggleIsOpen}>
-              Change
-            </button>
-          )}
-        </div>
+        {isOpen ? (
+          <button className='buttoncancel' onClick={toggleIsOpen}>
+            Cancel
+          </button>
+        ) : (
+          <button className='buttonchange' onClick={toggleIsOpen}>
+            Change
+          </button>
+        )}
       </div>
 
       {isOpen && (
@@ -67,6 +64,6 @@ export const ChangePassword: React.FC<ChangePasswordProps> = () => {
           </div>
         </div>
       )}
-    </StyledChangePassword>
+    </div>
   );
 };

@@ -28,15 +28,20 @@ export const Comment: React.FC<CommentProps> = ({
 }) => {
   const [likeCounter, setLikeCounter] = useState<number>(comment.likeCounter);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { likedComments, isLoading_User, setLikedComments, isLog } = useUser();
+  const {
+    user: { likedComments },
+    loading,
+    setLikedComments,
+    isLog,
+  } = useUser();
 
   const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
-    if (comment._id && !isLoading_User && likedComments) {
+    if (comment._id && !loading && likedComments) {
       setIsLiked(likedComments.includes(comment._id));
     }
-  }, [comment._id]);
+  }, [comment._id, loading, likedComments]);
 
   const handleDelete = () => {
     CommentService.deleteOne(idPost, jwt, comment._id)

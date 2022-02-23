@@ -4,6 +4,7 @@ import UserService from '../../services/user';
 import userReducer from './UserReducer';
 import Cookies from 'universal-cookie';
 import { useSnackBar } from '../../hooks/useSnackBar';
+import { useEffect } from 'react';
 
 interface IUserContext {
   userState: IUserState;
@@ -27,51 +28,74 @@ interface props {
 export const UserProvider = ({ children }: props) => {
   const cookies = new Cookies();
   const initialState: IUserState = {
-    id: '',
+    loading: false,
+    error: '',
     isLog: false,
-    isLoading_User: true,
-    username: '',
-    likedPosts: [],
-    likedComments: [],
+    user: {
+      id: '',
+      username: '',
+      isAuthor: false,
+      likedPosts: [],
+      likedComments: [],
+      token: '',
+    },
   };
 
-  const checkIsLog = () => {
-    let jwt = cookies.get('JWT');
-    if (!jwt) {
-      dispatch({ type: 'SET_ISLOADING', payload: false });
-      dispatch({ type: 'SET_ISLOG', payload: false });
-      return;
-    }
-    UserService.getOne(jwt)
-      .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          const { username, likedPosts, likedComments, _id } = data.Data;
-          dispatch({ type: 'SET_USER_ID', payload: _id });
-          dispatch({ type: 'SET_ISLOG', payload: true });
-          dispatch({ type: 'SET_USERNAME', payload: username });
-          dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
-          dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
-          dispatch({ type: 'SET_ISLOADING', payload: false });
-        }
-      })
-      .catch((e) => {
-        dispatch({ type: 'SET_ISLOG', payload: false });
-        dispatch({ type: 'SET_ISLOADING', payload: false });
-        openSnackBar('error retrieving your data, please login again', true);
-      });
-  };
-  //SnackBar hook
   const { openSnackBar } = useSnackBar();
 
   const [userState, dispatch] = useReducer(userReducer, initialState);
+
+  useEffect(() => {
+    checkIsLog();
+  }, []);
+
+  const checkIsLog = async () => {
+    dispatch({ type: 'SET_ISLOADING', payload: true });
+    const jwt = cookies.get('JWT');
+    if (!jwt) {
+      dispatch({ type: 'SET_ISLOADING', payload: false });
+      dispatch({ type: 'RESET', payload: initialState });
+      return;
+    }
+    try {
+      const {
+        status,
+        data: { Data: userData },
+      } = await UserService.getOne(jwt);
+      console.log(userData);
+      if (status === 200) {
+        const { username, likedPosts, likedComments, _id, role } = userData;
+        dispatch({ type: 'SET_USER_ID', payload: _id });
+        dispatch({ type: 'SET_ISLOG', payload: true });
+        dispatch({ type: 'SET_USERNAME', payload: username });
+        dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
+        dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
+        dispatch({ type: 'SET_TOKEN', payload: jwt });
+        if (role === 1) {
+          dispatch({ type: 'SET_ISAUTHOR', payload: true });
+        } else {
+          dispatch({ type: 'SET_ISAUTHOR', payload: false });
+        }
+        dispatch({ type: 'SET_ISLOADING', payload: false });
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: 'RESET',
+        payload: { ...initialState, loading: false },
+      });
+      openSnackBar('error retrieving your data, please login again', true);
+      cookies.remove('JWT');
+    }
+  };
 
   const login = (user: IUser) => {
     UserService.login(user)
       .then((res) => {
         const { status, data } = res;
         if (status === 200) {
-          const { username, _id, token, likedPosts, likedComments } = data.Data;
+          const { username, _id, token, likedPosts, likedComments, role } =
+            data.Data;
           cookies.set('JWT', token, { path: '/' });
           dispatch({ type: 'SET_USER_ID', payload: _id });
           dispatch({ type: 'SET_ISLOG', payload: true });
@@ -79,6 +103,9 @@ export const UserProvider = ({ children }: props) => {
           dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
           dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
           dispatch({ type: 'SET_ISLOADING', payload: false });
+          if (role === 1) {
+            dispatch({ type: 'SET_ISAUTHOR', payload: true });
+          }
           openSnackBar('Welcome ' + username, false);
         }
       })
@@ -104,12 +131,7 @@ export const UserProvider = ({ children }: props) => {
   };
 
   const logout = () => {
-    dispatch({ type: 'SET_ISLOG', payload: false });
-    dispatch({ type: 'SET_USERNAME', payload: '' });
-    dispatch({ type: 'SET_LIKEDPOSTS', payload: [] });
-    dispatch({ type: 'SET_LIKEDCOMMENTS', payload: [] });
-    dispatch({ type: 'SET_USER_ID', payload: '' });
-
+    dispatch({ type: 'RESET', payload: { ...initialState, loading: false } });
     cookies.remove('JWT');
     openSnackBar('Logged out', false);
   };

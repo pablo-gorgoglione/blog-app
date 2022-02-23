@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
 export const StyledAbout = styled.div`
-  padding: 40px;
-  border-radius: 8px;
-  background-color: rgb(42, 42, 42);
-  border: 2px solid rgb(70, 70, 70);
+  & {
+    padding: 40px;
+    border-radius: 8px;
+    background-color: rgb(42, 42, 42);
+    border: 2px solid rgb(70, 70, 70);
+  }
   .main-container {
     display: flex;
     flex-direction: column;

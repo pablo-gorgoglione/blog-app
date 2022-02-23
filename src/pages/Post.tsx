@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'universal-cookie';
 import PostService from '../services/post';
 import LikeService from '../services/like';
 import { StyledPost } from '../components/styles/Post.styled';
-import { DateFormat } from '../utils/DateFormatting';
 import { IPost, IComment } from '../interfaces/interfaces';
 import { Spinner } from '../components/Spinner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,57 +29,51 @@ const commmentsInitialValues = {} as IComment[];
 export const Post: React.FC<PostProps> = () => {
   let navigate = useNavigate();
   const [post, setPost] = useState<IPost>(postInitialValues);
-  const [loading, setLoading] = useState<boolean>(true);
   const [comments, setComments] = useState<IComment[]>(commmentsInitialValues);
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const { likedPosts, isLoading_User, setLikedPost, isLog, id } = useUser();
+  const [clicked, setClicked] = useState<boolean>(false);
+  const [loadingPost, setLoadingPost] = useState<boolean>(true);
+  const {
+    user: { likedPosts, id, token },
+    loading: loadingUser,
+    setLikedPost,
+    isLog,
+  } = useUser();
 
   const params = useParams();
   const idPost = params.idPost;
-  const cookies = new Cookies();
-  let jwt = cookies.get('JWT');
 
   const { openSnackBar } = useSnackBar();
 
   useEffect(() => {
     const getPost = () => {
-      PostService.getOne(idPost, jwt)
+      PostService.getOne(idPost, token)
         .then((res) => {
           const { status, data } = res;
           if (status === 200) {
             const { Data: Post } = data;
             setPost(Post);
           }
+          setLoadingPost(false);
         })
         .catch((e) => {
+          setLoadingPost(false);
           openSnackBar('Error getting the post', true);
         });
     };
-
+    setLoadingPost(true);
     getPost();
     getAllComments();
   }, []);
 
   useEffect(() => {
-    if (!isLoading_User && !loading) {
+    if (!loadingUser && !loadingPost && likedPosts) {
       setIsLiked(likedPosts.includes(post._id));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading_User, loading, isLog]);
-
-  useEffect(() => {
-    /* change the Date format when the post is loaded */
-    let date: string = DateFormat(post.datePublished);
-    setPost({ ...post, datePublished: date });
-
-    if (post._id) {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [post.content]);
+  }, [loadingUser, loadingPost, likedPosts]);
 
   const getAllComments = () => {
-    PostService.getAllComments(idPost, jwt)
+    PostService.getAllComments(idPost, token)
       .then((res) => {
         const { status, data } = res;
         if (status === 200) {
@@ -94,30 +86,30 @@ export const Post: React.FC<PostProps> = () => {
       });
   };
 
-  const handleLikeEvent = () => {
-    const tempLikeCounter = post.likeCounter;
+  const handleLikeEvent = async () => {
     if (!isLog) {
       openSnackBar('Login to like a post', true);
       return;
     }
+    setClicked(true);
+    setTimeout(() => {
+      setClicked(false);
+    }, 1000);
+
+    const tempLikeCounter = post.likeCounter;
     setIsLiked(true);
     setPost({ ...post, likeCounter: post.likeCounter + 1 });
-    LikeService.sendLikePost(idPost, jwt)
-      .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          const {
-            Data: { likeCounter: newLikeCounter, likedPosts },
-          } = data;
-          setPost({ ...post, likeCounter: newLikeCounter });
-          setLikedPost(likedPosts);
-        }
-      })
-      .catch((e) => {
-        setIsLiked(false);
-        setPost({ ...post, likeCounter: tempLikeCounter });
-        console.log({ ...e });
-      });
+    try {
+      const {
+        data: { Data },
+      } = await LikeService.sendLikePost(idPost, token);
+      const { likedPosts } = Data;
+      setLikedPost(likedPosts);
+    } catch (error) {
+      setIsLiked(false);
+      setPost({ ...post, likeCounter: tempLikeCounter });
+      console.log('Failed: ', error);
+    }
   };
 
   const handleDislikeEvent = () => {
@@ -125,22 +117,21 @@ export const Post: React.FC<PostProps> = () => {
       openSnackBar('Login to like a post', true);
       return;
     }
+    setClicked(true);
+    setTimeout(() => {
+      setClicked(false);
+    }, 1000);
 
     const tempLikeCounter = post.likeCounter;
 
     setIsLiked(false);
     setPost({ ...post, likeCounter: post.likeCounter - 1 });
 
-    LikeService.deleteLikePost(idPost, jwt)
+    LikeService.deleteLikePost(idPost, token)
       .then((res) => {
-        const { status, data } = res;
-        if (status === 200) {
-          const {
-            Data: { likeCounter: newLikeCounter, likedPosts },
-          } = data;
-          setPost({ ...post, likeCounter: newLikeCounter });
-          setLikedPost(likedPosts);
-        }
+        const { data: Data } = res;
+        const { likedPosts } = Data;
+        setLikedPost(likedPosts);
       })
       .catch((e) => {
         setIsLiked(true);
@@ -149,7 +140,7 @@ export const Post: React.FC<PostProps> = () => {
       });
   };
 
-  if (loading) {
+  if (loadingUser) {
     return <Spinner />;
   }
 
@@ -159,6 +150,7 @@ export const Post: React.FC<PostProps> = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ width: '100%' }}
       >
         <StyledPost>
           <div className='postcontainer'>
@@ -167,14 +159,22 @@ export const Post: React.FC<PostProps> = () => {
             </button>
             <div className='Content'>
               <h1>{post.title}</h1>
-              <p>{post.datePublished}</p>
+              <p>{post.datePublished.substring(0, 10)}</p>
               <p>{post.content}</p>
             </div>
             <div className='likecontainer'>
               {isLiked ? (
-                <FaHeart className='likeIcon' onClick={handleDislikeEvent} />
+                <FaHeart
+                  style={clicked ? { pointerEvents: 'none' } : {}}
+                  className='likeIcon'
+                  onClick={handleDislikeEvent}
+                />
               ) : (
-                <FaHeart className='dislikeIcon' onClick={handleLikeEvent} />
+                <FaHeart
+                  style={clicked ? { pointerEvents: 'none' } : {}}
+                  className='dislikeIcon'
+                  onClick={handleLikeEvent}
+                />
               )}
               {post.likeCounter}
             </div>
@@ -183,7 +183,7 @@ export const Post: React.FC<PostProps> = () => {
             <CommentList
               getAllComments={getAllComments}
               post={post}
-              jwt={jwt}
+              jwt={token}
               comments={comments}
               userId={id}
             ></CommentList>

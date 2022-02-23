@@ -15,7 +15,8 @@ export const StyledPagination = styled.div`
   }
   li {
     cursor: pointer;
-    border: 2px solid white;
+    border: 2px solid rgb(85, 85, 85);
+    color: rgb(85, 85, 85);
     border-radius: 5px;
     padding: 0;
     margin: 0;
@@ -24,7 +25,9 @@ export const StyledPagination = styled.div`
     display: table;
     transition: 100ms;
     &:hover {
-      background-color: #494949;
+      border-color: white;
+      color: white;
+      /* background-color: #494949; */
     }
   }
   li > p {
@@ -33,5 +36,9 @@ export const StyledPagination = styled.div`
     padding: 0;
     vertical-align: middle;
     text-align: center;
+  }
+  .active {
+    border-color: white;
+    color: white;
   }
 `;
