@@ -62,7 +62,6 @@ export const UserProvider = ({ children }: props) => {
         status,
         data: { Data: userData },
       } = await UserService.getOne(jwt);
-      console.log(userData);
       if (status === 200) {
         const { username, likedPosts, likedComments, _id, role } = userData;
         dispatch({ type: 'SET_USER_ID', payload: _id });
@@ -131,8 +130,8 @@ export const UserProvider = ({ children }: props) => {
   };
 
   const logout = () => {
+    cookies.set('JWT', '');
     dispatch({ type: 'RESET', payload: { ...initialState, loading: false } });
-    cookies.remove('JWT');
     openSnackBar('Logged out', false);
   };
 

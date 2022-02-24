@@ -26,7 +26,10 @@ export const CommentList: React.FC<CommentListProps> = ({
   const [newcomment, setNewComment] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { openSnackBar } = useSnackBar();
-  const { isLog } = useUser();
+  const {
+    isLog,
+    user: { token },
+  } = useUser();
 
   const toggleIsOpen = () => {
     setIsOpen(!isOpen);
@@ -41,13 +44,12 @@ export const CommentList: React.FC<CommentListProps> = ({
       openSnackBar('Login to comment', true);
       return;
     }
-    console.log('asdasd???ASD?AS??');
     if (newcomment.trim().length <= 4) {
       openSnackBar('Comment must be at least 5 characters', true);
       return;
     }
 
-    CommentService.createOne(post._id, jwt, newcomment)
+    CommentService.createOne(post._id, token, newcomment)
       .then(() => {
         openSnackBar('Comment created!', false);
         getAllComments();
@@ -55,7 +57,7 @@ export const CommentList: React.FC<CommentListProps> = ({
         setIsOpen(true);
       })
       .catch((e) => {
-        console.log(e);
+        console.log({ ...e });
       });
   };
   return (

@@ -29,8 +29,11 @@ const CreatePost = () => {
   } = useUser();
 
   const [title, setTitle] = useState<string>('');
+  const [titleError, setTitleError] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [contentError, setContentError] = useState<string>('');
   const [tags, setTags] = useState<Tag[]>([]);
+  const [tagsError, setTagsError] = useState<string>('');
   const [edit, setEdit] = useState<boolean>(false);
   const [tag, setTag] = useState<Tag>({
     id: Math.random(),
@@ -40,39 +43,42 @@ const CreatePost = () => {
 
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    setTitleError('');
   };
   const changeContent = (e: any) => {
     setContent(e.target.value);
+    setContentError('');
   };
 
   const addTag = () => {
-    if (edit) {
-      //edit tag segun id
-      // const obj = tags.find(({ id }) => id === tag.id) as Tag;
-      // const index = tags.indexOf(obj);
-      const index = tags.findIndex((e) => e.id === tag.id);
-      let tempTags = tags;
-      tempTags[index].text = tag.text;
-      setTags(tempTags);
-      setEdit(false);
-      setTag({
-        id: Math.random(),
-        text: '',
-      });
+    if (tag.text.trim().length < 4) {
+      setTagsError('4 characters al least');
     } else {
-      //crear nuevo tag
-      let tempTags = tags;
-      tempTags.push({ id: tag.id, text: tag.text });
-      setTags(tempTags);
-      setTag({
-        id: Math.random(),
-        text: '',
-      });
+      if (edit) {
+        const index = tags.findIndex((e) => e.id === tag.id);
+        let tempTags = tags;
+        tempTags[index].text = tag.text;
+        setTags(tempTags);
+        setEdit(false);
+        setTag({
+          id: Math.random(),
+          text: '',
+        });
+      } else {
+        let tempTags = tags;
+        tempTags.push({ id: tag.id, text: tag.text });
+        setTags(tempTags);
+        setTag({
+          id: Math.random(),
+          text: '',
+        });
+      }
     }
   };
 
   const changeTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTag({ ...tag, text: e.target.value });
+    setTagsError('');
   };
 
   const editTag = (tag: Tag) => {
@@ -80,7 +86,6 @@ const CreatePost = () => {
     setTag(tag);
   };
   const deleteTag = (idDelete: number) => {
-    console.log(idDelete);
     // const index = tags.findIndex((e) => e.id === idDelete);
     const tempTags = tags.filter((t) => t.id !== idDelete);
     setTags(tempTags);
@@ -92,6 +97,28 @@ const CreatePost = () => {
       id: Math.random(),
       text: '',
     });
+  };
+
+  const validatePostData = () => {
+    let flag = false;
+    if (!title) {
+      setTitleError('A title is required');
+      flag = true;
+    }
+    if (title.trim().length < 5) {
+      setTitleError('The title must be at least 5 characters');
+      flag = true;
+    }
+    if (tags.length === 0) {
+      setTagsError('One tag is required');
+      flag = true;
+    }
+    if (content.trim().length === 0) {
+      setContentError('Content cannot be empty');
+    }
+    if (!flag) {
+      createPost();
+    }
   };
 
   const createPost = async () => {
@@ -111,7 +138,7 @@ const CreatePost = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log({ ...error });
-        openSnackBar('error', true);
+        openSnackBar('Error creating the post', true);
       } else {
         //Other error
         // throw new Error('different error than axios');
@@ -131,6 +158,8 @@ const CreatePost = () => {
       <h2>Creating a post</h2>
 
       <h3>Title</h3>
+      {titleError && <p className='error-message'>{titleError}</p>}
+
       <input
         className='title'
         placeholder='Enter title '
@@ -138,6 +167,8 @@ const CreatePost = () => {
         onChange={(e) => changeTitle(e)}
       />
       <h3>Content</h3>
+      {contentError && <p className='error-message'>{contentError}</p>}
+
       <textarea
         className='content'
         onChange={changeContent}
@@ -146,6 +177,7 @@ const CreatePost = () => {
       />
 
       <h3>Tags</h3>
+      {tagsError && <p className='error-message'>{tagsError}</p>}
       <input
         className='tag'
         type='text'
@@ -160,7 +192,11 @@ const CreatePost = () => {
         {edit ? 'Edit' : 'Add'}
       </button>
 
-      {edit && <button onClick={cancelEdit}>X</button>}
+      {edit && (
+        <button className='cancel-edit' onClick={cancelEdit}>
+          cancel
+        </button>
+      )}
 
       {tags.length > 0 && (
         <ul>
@@ -176,19 +212,20 @@ const CreatePost = () => {
         </ul>
       )}
 
-      <br />
-      <br />
-      <label htmlFor='post'>Post</label>
-      <input
-        type='checkbox'
-        name='post'
-        id='post'
-        onChange={() => setPublish(!publish)}
-        checked={publish}
-      />
-      <br />
-      <br />
-      <button onClick={createPost}>Save</button>
+      <div>
+        <button onClick={validatePostData}>Save</button>
+
+        <div>
+          <input
+            type='checkbox'
+            name='post'
+            id='post'
+            onChange={() => setPublish(!publish)}
+            checked={publish}
+          />
+          <label htmlFor='post'>Publish now</label>
+        </div>
+      </div>
     </StyledCreatePost>
   );
 };

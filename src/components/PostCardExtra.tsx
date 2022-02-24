@@ -31,12 +31,10 @@ const PostCardExtra = ({ post }: Props) => {
     if (isExecuted) {
       try {
         const res = await PostService.deleteOne(post._id, token);
-        console.log(res);
         openSnackBar('Post deleted', false);
         getPosts();
       } catch (error) {
         openSnackBar('Error, post was not deleted ', true);
-        console.log(error);
       }
     }
   };

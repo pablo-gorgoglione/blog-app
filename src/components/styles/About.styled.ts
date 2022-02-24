@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const StyledAbout = styled.div`
   & {
+    width: 60%;
     padding: 40px;
     border-radius: 8px;
     background-color: rgb(42, 42, 42);
@@ -51,5 +52,11 @@ export const StyledAbout = styled.div`
   svg {
     width: 35px;
     height: 35px;
+  }
+  @media (max-width: 1050px) {
+    .link-container {
+      flex-direction: column;
+      row-gap: 30px;
+    }
   }
 `;

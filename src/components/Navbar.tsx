@@ -22,7 +22,7 @@ export const Navbar: React.FC<HeaderProps> = () => {
     <StyledNav>
       <h1>
         <Link className='BlogAppLink' to=''>
-          Pa-Blog
+          Blog-App
         </Link>
       </h1>
 

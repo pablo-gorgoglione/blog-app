@@ -8,6 +8,12 @@ export const StyledCreatePost = styled.div`
     border: 2px solid rgb(70, 70, 70);
     border-radius: 8px;
   }
+  .error-message {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: red;
+  }
   h2 {
     margin-top: 0;
   }
@@ -23,6 +29,17 @@ export const StyledCreatePost = styled.div`
   .title {
     font-size: 1.17em;
   }
+  button:disabled {
+    border-color: black;
+    color: grey;
+  }
+
+  .cancel-edit {
+    width: fit-content;
+    margin-left: 15px;
+    color: red;
+    border-color: red;
+  }
 
   .title,
   .content {
@@ -37,6 +54,7 @@ export const StyledCreatePost = styled.div`
     margin-top: 15px;
     padding: 0;
     column-gap: 1%;
+    margin-bottom: 0;
   }
   li {
     list-style: none;
@@ -75,6 +93,30 @@ export const StyledCreatePost = styled.div`
     cursor: pointer;
     width: 12px;
     height: 12px;
+  }
+  button {
+    margin-left: 20px;
+    height: 25px;
+    width: 50px;
+    border-width: 0.1rem;
+    border-color: white;
+    max-width: 20rem;
+    background-color: rgb(33, 33, 33);
+    border-radius: 12px;
+    color: #eee;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  & > div > button {
+    height: 35px;
+    width: 60px;
+    margin-right: 30px;
+    margin-left: 0px;
+  }
+  & > div {
+    padding-top: 30px;
+    display: flex;
+    align-items: center;
   }
   @media (max-width: 700px) {
     ul {

@@ -79,7 +79,6 @@ export const Comment: React.FC<CommentProps> = ({
         }
       })
       .catch((e) => {
-        console.log(e);
         setIsLiked(false);
         setLikeCounter(tempLikeCounter);
       });
@@ -108,7 +107,6 @@ export const Comment: React.FC<CommentProps> = ({
         }
       })
       .catch((e) => {
-        console.log(e.response.data.Message);
         setLikeCounter(tempLikeCounter);
         setIsLiked(true);
       });

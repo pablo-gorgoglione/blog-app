@@ -62,6 +62,9 @@ export const About: React.FC<AboutProps> = () => {
                 </a>
               </div>
             </div>
+            <a href='mailto:pablogorgoglione@gmail.com'>
+              pablogorgoglione@gmail.com
+            </a>
           </div>
         </motion.div>
       </StyledAbout>

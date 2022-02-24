@@ -26,6 +26,11 @@ const EditPost = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [tempPost, setTempPost] = useState<IPost>({} as IPost);
 
+  //erros
+  const [titleError, setTitleError] = useState<string>('');
+  const [contentError, setContentError] = useState<string>('');
+  const [tagsError, setTagsError] = useState<string>('');
+
   //tag state
   const [edit, setEdit] = useState<boolean>(false);
   const [tags, setTags] = useState<Tag[]>([]);
@@ -70,6 +75,28 @@ const EditPost = () => {
     }
   }, [tempPost, loading]);
 
+  const validatePostData = () => {
+    let flag = false;
+    if (!tempPost.title) {
+      setTitleError('A title is required');
+      flag = true;
+    }
+    if (tempPost.title.trim().length < 5) {
+      setTitleError('The title must be at least 5 characters');
+      flag = true;
+    }
+    if (tags.length === 0) {
+      setTagsError('One tag is required');
+      flag = true;
+    }
+    if (tempPost.content.trim().length === 0) {
+      setContentError('Content cannot be empty');
+    }
+    if (!flag) {
+      updatePost();
+    }
+  };
+
   //send the updated post to the API
   const updatePost = async () => {
     let tempTags: Array<string> = [];
@@ -78,7 +105,6 @@ const EditPost = () => {
     });
 
     try {
-      console.log(tempTags);
       await PostService.updateOne(idPost, jwt, {
         ...tempPost,
         tags: tempTags,
@@ -100,32 +126,38 @@ const EditPost = () => {
   };
   const changeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTempPost({ ...tempPost, title: e.target.value });
+    setTitleError('');
   };
   const changeContent = (e: any) => {
     setTempPost({ ...tempPost, content: e.target.value });
+    setContentError('');
   };
 
   /*  tag handlers */
   const addTag = () => {
-    if (edit) {
-      const index = tags.findIndex((e) => e.id === tag.id);
-      let tempTags = tags;
-      tempTags[index].text = tag.text;
-      setTags(tempTags);
-      setEdit(false);
-      setTag({
-        id: Math.random(),
-        text: '',
-      });
+    if (tag.text.trim().length < 4) {
+      setTagsError('4 characters al least');
     } else {
-      //crear nuevo tag
-      let tempTags = tags;
-      tempTags.push({ id: tag.id, text: tag.text });
-      setTags(tempTags);
-      setTag({
-        id: Math.random(),
-        text: '',
-      });
+      if (edit) {
+        const index = tags.findIndex((e) => e.id === tag.id);
+        let tempTags = tags;
+        tempTags[index].text = tag.text;
+        setTags(tempTags);
+        setEdit(false);
+        setTag({
+          id: Math.random(),
+          text: '',
+        });
+      } else {
+        //crear nuevo tag
+        let tempTags = tags;
+        tempTags.push({ id: tag.id, text: tag.text });
+        setTags(tempTags);
+        setTag({
+          id: Math.random(),
+          text: '',
+        });
+      }
     }
   };
   const cancelEdit = () => {
@@ -137,6 +169,7 @@ const EditPost = () => {
   };
   const changeTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTag({ ...tag, text: e.target.value });
+    setTagsError('');
   };
   const editTag = (tag: Tag) => {
     setEdit(true);
@@ -156,6 +189,8 @@ const EditPost = () => {
         <h2>Editing a post</h2>
 
         <h3>Title</h3>
+        {titleError && <p className='error-message'>{titleError}</p>}
+
         <input
           className='title'
           placeholder='Enter title '
@@ -163,6 +198,8 @@ const EditPost = () => {
           onChange={(e) => changeTitle(e)}
         />
         <h3>Content</h3>
+        {contentError && <p className='error-message'>{contentError}</p>}
+
         <textarea
           placeholder='Enter content'
           name='content'
@@ -174,6 +211,8 @@ const EditPost = () => {
         </textarea>
 
         <h3>Tags</h3>
+        {tagsError && <p className='error-message'>{tagsError}</p>}
+
         <input
           className='tag'
           type='text'
@@ -188,7 +227,11 @@ const EditPost = () => {
           {edit ? 'Edit' : 'Add'}
         </button>
 
-        {edit && <button onClick={cancelEdit}>X</button>}
+        {edit && (
+          <button className='cancel-edit' onClick={cancelEdit}>
+            cancel
+          </button>
+        )}
 
         {tags.length > 0 && (
           <ul>
@@ -203,20 +246,20 @@ const EditPost = () => {
             ))}
           </ul>
         )}
-        <br />
-        <br />
-        <label htmlFor='post'>Post</label>
-        <input
-          type='checkbox'
-          name='post'
-          id='post'
-          onChange={changeIsPusblished}
-          checked={tempPost.isPublished === 1 ? true : false}
-        />
-        <br />
-        <br />
 
-        <button onClick={updatePost}>Save</button>
+        <div>
+          <button onClick={validatePostData}>Save</button>
+          <div>
+            <input
+              type='checkbox'
+              name='post'
+              id='post'
+              onChange={changeIsPusblished}
+              checked={tempPost.isPublished === 1 ? true : false}
+            />
+            <label htmlFor='post'>Publish now</label>
+          </div>
+        </div>
       </StyledCreatePost>
     </>
   );
