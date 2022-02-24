@@ -99,6 +99,7 @@ export const Post: React.FC<PostProps> = () => {
     const tempLikeCounter = post.likeCounter;
     setIsLiked(true);
     setPost({ ...post, likeCounter: post.likeCounter + 1 });
+    console.log('token: ', token);
     try {
       const {
         data: { Data },

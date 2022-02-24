@@ -102,6 +102,7 @@ export const UserProvider = ({ children }: props) => {
           dispatch({ type: 'SET_LIKEDCOMMENTS', payload: likedComments });
           dispatch({ type: 'SET_LIKEDPOSTS', payload: likedPosts });
           dispatch({ type: 'SET_ISLOADING', payload: false });
+          dispatch({ type: 'SET_TOKEN', payload: token });
           if (role === 1) {
             dispatch({ type: 'SET_ISAUTHOR', payload: true });
           }
