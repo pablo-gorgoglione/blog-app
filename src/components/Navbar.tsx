@@ -27,7 +27,9 @@ export const Navbar: React.FC<HeaderProps> = () => {
       </h1>
 
       <div className='links-container'>
-        <Link to='about'>About</Link>
+        <Link to='about' className='aboutA'>
+          About
+        </Link>
         {loading ? (
           <Spinner />
         ) : isLog ? (

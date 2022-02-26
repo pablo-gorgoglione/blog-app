@@ -30,16 +30,18 @@ export const StyledNav = styled.nav`
     align-items: center;
   }
 
-  @media (max-width: 300px) {
+  @media (max-width: 700px) {
+    .loginSpan,
+    .aboutA {
+      font-size: 30px;
+    }
     h1 {
-      font-size: 90%;
+      font-size: 40px;
     }
     .links-container {
-      display: flex;
       flex-direction: column;
-    }
-    .links-container > a:first-child {
-      font-size: 90%;
+      row-gap: 20px;
+      align-items: center;
     }
   }
 `;

@@ -33,4 +33,14 @@ export const StyledAuthorPostList = styled.div`
     border: 2px solid rgb(70, 70, 70);
     cursor: auto;
   }
+  @media (max-width: 700px) {
+    & > div:first-child {
+      justify-content: center;
+    }
+    .author-postcard {
+      border-radius: 0px;
+      border-left: 0;
+      border-right: 0;
+    }
+  }
 `;

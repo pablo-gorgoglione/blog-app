@@ -79,6 +79,7 @@ export const UserMenu: React.FC<props> = ({ username, isAuthor, logout }) => {
                 <p>{username}</p>
               </div>
               <div className='divider'></div>
+
               <ul>
                 <li>
                   <div onClick={goSettings}>Settings</div>

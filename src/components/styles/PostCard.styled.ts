@@ -80,7 +80,7 @@ export const StyledPostCard = styled.div<props>`
     }
   }
 
-  @media (max-width: 850px) {
+  @media (max-width: 700px) {
     .title-div {
       flex-direction: column;
       row-gap: 20px;
@@ -88,12 +88,20 @@ export const StyledPostCard = styled.div<props>`
     .title-div > b {
       color: grey;
     }
-  }
-  @media (max-width: 450px) {
     .last-div {
       row-gap: 20px;
-      flex-direction: column;
-      align-items: center;
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
+    & {
+      cursor: pointer;
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      padding: 10px 20px;
+    }
+    .icons {
+      margin-left: 5px;
     }
   }
 `;

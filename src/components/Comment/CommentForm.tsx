@@ -19,6 +19,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      className='comment-form'
     >
       <textarea
         className='div-input'

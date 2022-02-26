@@ -186,78 +186,80 @@ const EditPost = () => {
   return (
     <>
       <StyledCreatePost>
-        <h2>Editing a post</h2>
+        <div className='createpost-container'>
+          <h2>Editing a post</h2>
 
-        <h3>Title</h3>
-        {titleError && <p className='error-message'>{titleError}</p>}
+          <h3>Title</h3>
+          {titleError && <p className='error-message'>{titleError}</p>}
 
-        <input
-          className='title'
-          placeholder='Enter title '
-          value={tempPost.title}
-          onChange={(e) => changeTitle(e)}
-        />
-        <h3>Content</h3>
-        {contentError && <p className='error-message'>{contentError}</p>}
+          <input
+            className='title'
+            placeholder='Enter title '
+            value={tempPost.title}
+            onChange={(e) => changeTitle(e)}
+          />
+          <h3>Content</h3>
+          {contentError && <p className='error-message'>{contentError}</p>}
 
-        <textarea
-          placeholder='Enter content'
-          name='content'
-          id='content'
-          className='content'
-          onChange={(e) => changeContent(e)}
-        >
-          {tempPost.content}
-        </textarea>
+          <textarea
+            placeholder='Enter content'
+            name='content'
+            id='content'
+            className='content'
+            onChange={(e) => changeContent(e)}
+          >
+            {tempPost.content}
+          </textarea>
 
-        <h3>Tags</h3>
-        {tagsError && <p className='error-message'>{tagsError}</p>}
+          <h3>Tags</h3>
+          {tagsError && <p className='error-message'>{tagsError}</p>}
 
-        <input
-          className='tag'
-          type='text'
-          name='tag'
-          id='tag'
-          value={tag.text}
-          onChange={changeTag}
-          disabled={tags.length > 3}
-        />
+          <input
+            className='tag'
+            type='text'
+            name='tag'
+            id='tag'
+            value={tag.text}
+            onChange={changeTag}
+            disabled={tags.length > 3}
+          />
 
-        <button onClick={addTag} disabled={tags.length > 3}>
-          {edit ? 'Edit' : 'Add'}
-        </button>
-
-        {edit && (
-          <button className='cancel-edit' onClick={cancelEdit}>
-            cancel
+          <button onClick={addTag} disabled={tags.length > 3}>
+            {edit ? 'Edit' : 'Add'}
           </button>
-        )}
 
-        {tags.length > 0 && (
-          <ul>
-            {tags.map((tag) => (
-              <div className='tag-item' key={tag.id}>
-                <li>{tag.text}</li>
-                <div>
-                  <FaEdit onClick={() => editTag(tag)} color='white' />
-                  <FaTimes onClick={() => deleteTag(tag.id)} color='white' />
+          {edit && (
+            <button className='cancel-edit' onClick={cancelEdit}>
+              cancel
+            </button>
+          )}
+
+          {tags.length > 0 && (
+            <ul>
+              {tags.map((tag) => (
+                <div className='tag-item' key={tag.id}>
+                  <li>{tag.text}</li>
+                  <div>
+                    <FaEdit onClick={() => editTag(tag)} color='white' />
+                    <FaTimes onClick={() => deleteTag(tag.id)} color='white' />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </ul>
-        )}
+              ))}
+            </ul>
+          )}
 
-        <div>
-          <button onClick={validatePostData}>Save</button>
           <div>
-            <input
-              type='checkbox'
-              name='post'
-              id='post'
-              onChange={changeIsPusblished}
-              checked={tempPost.isPublished === 1 ? true : false}
-            />
-            <label htmlFor='post'>Publish now</label>
+            <button onClick={validatePostData}>Save</button>
+            <div>
+              <input
+                type='checkbox'
+                name='post'
+                id='post'
+                onChange={changeIsPusblished}
+                checked={tempPost.isPublished === 1 ? true : false}
+              />
+              <label htmlFor='post'>Publish now</label>
+            </div>
           </div>
         </div>
       </StyledCreatePost>

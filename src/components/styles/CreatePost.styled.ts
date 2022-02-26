@@ -8,6 +8,9 @@ export const StyledCreatePost = styled.div`
     border: 2px solid rgb(70, 70, 70);
     border-radius: 8px;
   }
+  .createpost-container {
+    display: block;
+  }
   .error-message {
     margin: 0;
     margin-bottom: 10px;
@@ -107,22 +110,42 @@ export const StyledCreatePost = styled.div`
     cursor: pointer;
     font-size: 13px;
   }
-  & > div > button {
+  .tags-div > div > button {
     height: 35px;
     width: 60px;
     margin-right: 30px;
     margin-left: 0px;
   }
-  & > div {
-    padding-top: 30px;
+  .createpost-container > div:last-child {
+    padding-top: 20px;
     display: flex;
     align-items: center;
+    column-gap: 20px;
   }
   @media (max-width: 700px) {
+    & {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+    .createpost-container {
+      padding: 20px 30px 20px 20px;
+    }
+    h2,
+    h3 {
+      width: fit-content;
+    }
     ul {
       display: flex;
       flex-direction: column;
       row-gap: 1%;
+    }
+    .title,
+    .content {
+      width: 98%;
     }
   }
 `;

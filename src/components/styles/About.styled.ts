@@ -55,8 +55,23 @@ export const StyledAbout = styled.div`
   }
   @media (max-width: 1050px) {
     .link-container {
-      flex-direction: column;
+      flex-direction: column-reverse;
+      align-items: flex-start;
       row-gap: 30px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    & {
+      width: 100%;
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      padding: 0;
+      /* margin: 0 0 5% 0; */
+    }
+    .main-container {
+      padding: 20px 20px;
     }
   }
 `;

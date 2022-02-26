@@ -63,4 +63,41 @@ export const StyledPost = styled.div`
   .Content {
     margin: 20px;
   }
+  @media (max-width: 1200px) {
+    .Content > p:last-child {
+      font-size: 18px;
+    }
+  }
+  @media (max-width: 800px) {
+    .Content {
+      margin: 5px;
+    }
+    .Content > p:last-child {
+      font-size: 17px;
+      text-align: start;
+    }
+  }
+  @media (max-width: 700px) {
+    .postcontainer {
+      border-radius: 0px;
+      border-left: 0;
+      border-right: 0;
+      padding: 20px 10px;
+    }
+    .likeIcon {
+      width: 21px !important;
+      height: 21px !important;
+    }
+    .dislikeIcon {
+      width: 21px !important;
+      height: 21px !important;
+    }
+    .delete > svg {
+      width: 21px !important;
+      height: 21px !important;
+    }
+    .likecontainer {
+      font-size: 21px;
+    }
+  }
 `;

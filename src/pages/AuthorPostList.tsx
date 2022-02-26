@@ -46,7 +46,7 @@ const AuthorPostList = () => {
     return <h2>{error}</h2>;
   }
   return (
-    <StyledAuthorPostList className='sidaaaa'>
+    <StyledAuthorPostList>
       <div>
         <button
           onClick={() => setSelected(1)}

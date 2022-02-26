@@ -75,4 +75,26 @@ export const StyledCommentList = styled.div`
     color: black;
     background-color: white;
   }
+  @media (max-width: 700px) {
+    .general-container {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+    .div-input {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+    .div-input ~ div {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+    .div-input ~ div > button {
+      font-size: 10px;
+      height: 30px;
+      width: 70px;
+    }
+  }
 `;

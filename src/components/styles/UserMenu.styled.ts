@@ -39,6 +39,7 @@ export const StyledUserMenu = styled.nav`
   }
   .dropdown > div:first-child {
     cursor: pointer;
+    justify-content: center;
   }
 
   .dropdown button {
@@ -124,5 +125,41 @@ export const StyledUserMenu = styled.nav`
     margin-left: 20px;
     margin-bottom: 0px;
     color: rgb(163, 163, 163);
+  }
+  @media (max-width: 700px) {
+    .dropdown > div:first-child {
+      margin-bottom: 20px;
+    }
+    .dropdown-menu {
+      align-items: center;
+      position: static;
+      width: 100vw;
+      border-radius: 0;
+      border-right: 0;
+      border-left: 0;
+    }
+    .dropdown-menu > div:first-child {
+      margin: 10px 0 10px 0;
+
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+    }
+    .dropdown-menu > div:first-child > p:first-child {
+      margin: 0;
+    }
+    ul {
+      margin: 5px 0 5px 0;
+      align-items: center;
+    }
+    .dropdown-author {
+      /* align-items: center; */
+    }
+    li {
+      width: 100vw;
+    }
+    li > div {
+      margin: calc(100vw - 90vw);
+    }
   }
 `;

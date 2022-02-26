@@ -9,9 +9,6 @@ export const StyledComment = styled.div`
   border-top: 2px solid rgb(70, 70, 70);
 
   /*  */
-  .likecontainer {
-    margin: 0;
-  }
   .container {
   }
   .usernamediv {
@@ -65,8 +62,6 @@ export const StyledComment = styled.div`
     text-align: center;
     color: red;
   }
-  .btns > div:last-child {
-  }
 
   .content-container {
     font-size: 18px;
@@ -85,5 +80,8 @@ export const StyledComment = styled.div`
   }
   .delete > svg {
     cursor: pointer;
+  }
+  .likecontainer {
+    margin: 0;
   }
 `;
